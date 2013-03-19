@@ -57,6 +57,16 @@ sub user_tasks {
     return $response->decoded_content;
 }
 
+sub get_task {
+    my ($self, $task_id) = @_;
+
+    my $req = $self->_request('GET', "/user/task/$task_id");
+
+    my $response = $self->agent->request( $req );
+
+    return $response->decoded_content;
+}
+
 sub _request {
     my ($self, $type, $url) = @_;
 
