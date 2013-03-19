@@ -75,6 +75,10 @@ method new_task(
     :$note = ''
 ) {
 
+    # TODO : The API spec doesn't allow the submission of up/down
+    # values, but I feel that *should* be allowed, otherwise
+    # creating goals isn't full-featured.
+
     my $payload = $json->encode({
         type      => $type,
         text      => $text,
