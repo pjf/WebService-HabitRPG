@@ -19,6 +19,8 @@ if (not @ARGV) {
     hrpg tasks                   : Show current tasks
     hrpg habit|daily|reward|todo : Show tasks of current type
     };
+
+    exit 1;
 }
 
 # TODO: Support XDG?
