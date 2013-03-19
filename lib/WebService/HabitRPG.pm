@@ -18,6 +18,8 @@ has 'api_token' => (is => 'ro'); # aka x-api-key
 has 'user_id'   => (is => 'ro'); # aka x-api-user
 has 'agent'     => (is => 'rw');
 
+use constant URL_BASE => 'http://habitrpg.com/api/v1';
+
 sub BUILD {
     my ($self, $args) = @_;
 
@@ -37,7 +39,7 @@ sub BUILD {
 sub user {
     my ($self) = @_;
 
-    my $req = $self->_request('GET', 'https://habitrpg.com/api/v1/user');
+    my $req = $self->_request('GET', '/user');
 
     my $response = $self->agent->request( $req );
 
@@ -45,10 +47,20 @@ sub user {
 
 }
 
+sub user_tasks {
+    my ($self) = @_;
+
+    my $req = $self->_request('GET', '/user/tasks');
+
+    my $response = $self->agent->request( $req );
+
+    return $response->decoded_content;
+}
+
 sub _request {
     my ($self, $type, $url) = @_;
 
-    my $req = HTTP::Request->new( $type, $url );
+    my $req = HTTP::Request->new( $type, URL_BASE . $url );
     $req->header( 'Content-Type' => 'application/json');
     $req->header( 'x-api-user'   => $self->user_id    );
     $req->header( 'x-api-key'    => $self->api_token  );
