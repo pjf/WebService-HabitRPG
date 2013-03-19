@@ -20,7 +20,7 @@ has 'api_token' => (is => 'ro'); # aka x-api-key
 has 'user_id'   => (is => 'ro'); # aka x-api-user
 has 'agent'     => (is => 'rw');
 
-use constant URL_BASE => 'http://habitrpg.com/api/v1';
+use constant URL_BASE => 'https://habitrpg.com/api/v1';
 
 my $json = JSON::Any->new;
 
@@ -40,15 +40,30 @@ sub BUILD {
     return;
 }
 
-method user()       { return $self->_get_request( '/user'       ); }
-method user_tasks() { return $self->_get_request( '/user/tasks' ); }
+method user()       { return $self->_get_request( '/user'        ); }
+
+method user_tasks($type where qr{^(?: habit | daily | todo | reward | )$}x = "") {
+    if ($type) {
+        return $self->_get_request( "/user/tasks?type=$type" ); 
+    }
+    return $self->_get_request( "/user/tasks" ); 
+}
 
 method get_task($task_id) {
     return $self->_get_request("/user/task/$task_id");
 }
 
+# TODO: In theory we can request this via the API by giving some
+# sort of 'type' argument to /user/tasks. In practice, I haven't
+# figured out *how* it wants that argument.
+
+# method habits() {
+#    my $tasks = $self->user_tasks;
+#
+# }
+
 method new_task(
-    :$type! where qr{ habit | daily | todo | reward }x,
+    :$type! where qr{^(?: habit | daily | todo | reward )$}x,
     :$text!,
     :$completed,
     :$value = 0,
@@ -87,8 +102,6 @@ method updown(
 ) {
 
     my $url = 'https://habitrpg.com/v1/users/' . $self->user_id . '/tasks/' . $task . '/' . $direction;
-
-    warn "Posting to $url\n";
 
     my $req = HTTP::Request->new( 'POST', $url);
     $req->header( 'Content-Type' => 'application/json');

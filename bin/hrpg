@@ -10,6 +10,17 @@ use Data::Dumper;
 
 # VERSION
 
+if (not @ARGV) {
+    say q{
+    Usage:
+
+    hrpg dump                    : Dump entire user info
+    hrpg status                  : Show current HP/XP/GP
+    hrpg tasks                   : Show current tasks
+    hrpg habit|daily|reward|todo : Show tasks of current type
+    };
+}
+
 # TODO: Support XDG?
 my $config_file = "$ENV{HOME}/.habitrpgrc";
 
@@ -28,6 +39,7 @@ my $cmd = shift @ARGV;
 
 given ($cmd) {
     when ('dump')   { say Dumper $hrpg->user; }
+
     when ('status') {
         my $user = $hrpg->user;
         say "Hark, $user->{profile}{name}! (Lv $user->{stats}{lvl})";
@@ -35,4 +47,15 @@ given ($cmd) {
         say "XP: $user->{stats}{exp} / $user->{stats}{toNextLevel}";
         say "GP: $user->{stats}{gp}";
     }
+
+    when (/^(?<type>habit|todo|daily|reward)$/) {
+        my $tasks = $hrpg->user_tasks($+{type});
+        say Dumper $tasks;
+    }
+
+    when ('tasks') {
+        my $tasks = $hrpg->user_tasks();
+        say Dumper $tasks;
+    }
+
 }
