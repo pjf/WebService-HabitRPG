@@ -17,7 +17,4 @@ looks like the following:
 
 You can get these values by going to Settings -> API in HabitRPG.
 
-The command line client can be used with:
-
-* `hrpg status` -- show basic character information
-* `hrpg dump` -- dumps all character information (for debugging)
+Use `hrng` without any arguments to see command line help.
