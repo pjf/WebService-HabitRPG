@@ -95,6 +95,28 @@ method new_task(
 
 }
 
+# Convenience methods
+method up  ($task) { return $self->updown($task, 'up'  ); }
+method down($task) { return $self->updown($task, 'down'); }
+
+# Returns: {"exp":11,"gp":12.416828586491677,"hp":50,"lvl":2,"delta":1}
+
+method updown(
+    $task!,
+    $direction! where qr{up|down}
+) {
+
+    my $url = 'https://habitrpg.com/v1/users/' . $self->user_id . '/tasks/' . $task . '/' . $direction;
+
+    warn "Posting to $url\n";
+
+    my $req = HTTP::Request->new( 'POST', $url);
+    $req->header( 'Content-Type' => 'application/json');
+    $req->content( $json->encode({ apiToken => $self->api_token }) );
+
+    return $self->agent->request( $req )->decoded_content;
+}
+
 method _request($type, $url) {
 
     my $req = HTTP::Request->new( $type, URL_BASE . $url );
