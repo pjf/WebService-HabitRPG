@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use WebService::HabitRPG;
 use Config::Tiny;
+use Data::Dumper;
 
 # PODNAME: hrpg
 
@@ -26,7 +27,12 @@ my $hrpg = WebService::HabitRPG->new(
 my $cmd = shift @ARGV;
 
 given ($cmd) {
-    when ('user') {
-        say $hrpg->user;
+    when ('dump')   { say Dumper $hrpg->user; }
+    when ('status') {
+        my $user = $hrpg->user;
+        say "Hark, $user->{profile}{name}! (Lv $user->{stats}{lvl})";
+        say "HP: $user->{stats}{hp} / $user->{stats}{maxHealth}";
+        say "XP: $user->{stats}{exp} / $user->{stats}{toNextLevel}";
+        say "GP: $user->{stats}{gp}";
     }
 }

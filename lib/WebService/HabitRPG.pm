@@ -40,31 +40,11 @@ sub BUILD {
     return;
 }
 
-method user() {
-
-    my $req = $self->_request('GET', '/user');
-
-    my $response = $self->agent->request( $req );
-
-    return $response->decoded_content;
-}
-
-method user_tasks() {
-
-    my $req = $self->_request('GET', '/user/tasks');
-
-    my $response = $self->agent->request( $req );
-
-    return $response->decoded_content;
-}
+method user()       { return $self->_get_request( '/user'       ); }
+method user_tasks() { return $self->_get_request( '/user/tasks' ); }
 
 method get_task($task_id) {
-
-    my $req = $self->_request('GET', "/user/task/$task_id");
-
-    my $response = $self->agent->request( $req );
-
-    return $response->decoded_content;
+    return $self->_get_request("/user/task/$task_id");
 }
 
 method new_task(
@@ -91,7 +71,7 @@ method new_task(
 
     $req->content( $payload );
 
-    return $self->agent->request( $req )->decoded_content;
+    return $json->decode( $self->agent->request( $req )->decoded_content );
 
 }
 
@@ -114,7 +94,15 @@ method updown(
     $req->header( 'Content-Type' => 'application/json');
     $req->content( $json->encode({ apiToken => $self->api_token }) );
 
-    return $self->agent->request( $req )->decoded_content;
+    return $json->decode( $self->agent->request( $req )->decoded_content );
+}
+
+method _get_request($url) {
+    my $req = $self->_request('GET', $url);
+
+    my $response = $self->agent->request( $req );
+
+    return $json->decode( $response->decoded_content );
 }
 
 method _request($type, $url) {
