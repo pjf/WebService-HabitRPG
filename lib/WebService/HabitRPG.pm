@@ -67,8 +67,16 @@ method new_task(
     :$text!,
     :$completed,
     :$value = 0,
-    :$note = ''
+    :$note = '',
+    :$up = 1,
+    :$down = 1
 ) {
+
+    # Magical boolification for JSONification.
+    # TODO: These work with JSON::XS. Do they work with other backends?
+
+    $up   = $up   ? \1 : \0;
+    $down = $down ? \1 : \0;
 
     # TODO : The API spec doesn't allow the submission of up/down
     # values, but I feel that *should* be allowed, otherwise
@@ -80,6 +88,8 @@ method new_task(
         completed => $completed,
         value     => $value,
         note      => $note,
+        up        => $up,
+        down      => $down,
     });
 
     my $req = $self->_request('POST', '/user/task');
