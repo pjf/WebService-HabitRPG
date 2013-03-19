@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+use v5.10.0;
+use strict;
+use warnings;
+use WebService::HabitRPG;
+use Config::Tiny;
+
+# PODNAME: hrpg
+
+# VERSION
+
+# TODO: Support XDG?
+my $config_file = "$ENV{HOME}/.habitrpgrc";
+
+my $config = Config::Tiny->read( $config_file );
+
+unless ($config->{auth}{api_token}) {
+    die "Cannot find user credentials in $config_file\n";
+}
+
+my $hrpg = WebService::HabitRPG->new(
+    api_token => $config->{auth}{api_token},
+    user_id   => $config->{auth}{user_id},
+);
+
+my $cmd = shift @ARGV;
+
+given ($cmd) {
+    when ('user') {
+        say $hrpg->user;
+    }
+}
