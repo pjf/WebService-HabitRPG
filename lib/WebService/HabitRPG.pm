@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use autodie;
 use Moo;
-use WWW::Mechanize; # Probably overkill
+use WWW::Mechanize;
 use Method::Signatures;
 use JSON::Any;
 
@@ -16,13 +16,12 @@ use JSON::Any;
 
 =cut
 
-has 'api_token' => (is => 'ro'); # aka x-api-key
-has 'user_id'   => (is => 'ro'); # aka x-api-user
-has 'agent'     => (is => 'rw');
+has 'api_token'  => (is => 'ro'); # aka x-api-key
+has 'user_id'    => (is => 'ro'); # aka x-api-user
+has 'agent'      => (is => 'rw');
+has '_last_json' => (is => 'rw'); # For debugging
 
 use constant URL_BASE => 'https://habitrpg.com/api/v1';
-
-my $json = JSON::Any->new;
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -53,15 +52,6 @@ method get_task($task_id) {
     return $self->_get_request("/user/task/$task_id");
 }
 
-# TODO: In theory we can request this via the API by giving some
-# sort of 'type' argument to /user/tasks. In practice, I haven't
-# figured out *how* it wants that argument.
-
-# method habits() {
-#    my $tasks = $self->user_tasks;
-#
-# }
-
 method new_task(
     :$type! where qr{^(?: habit | daily | todo | reward )$}x,
     :$text!,
@@ -82,7 +72,7 @@ method new_task(
     # values, but I feel that *should* be allowed, otherwise
     # creating goals isn't full-featured.
 
-    my $payload = $json->encode({
+    my $payload = $self->_encode_json({
         type      => $type,
         text      => $text,
         completed => $completed,
@@ -92,11 +82,11 @@ method new_task(
         down      => $down,
     });
 
-    my $req = $self->_request('POST', '/user/task');
+    my $req = $self->_build_request('POST', '/user/task');
 
     $req->content( $payload );
 
-    return $json->decode( $self->agent->request( $req )->decoded_content );
+    return $self->_request( $req );
 
 }
 
@@ -115,27 +105,42 @@ method updown(
 
     my $req = HTTP::Request->new( 'POST', $url);
     $req->header( 'Content-Type' => 'application/json');
-    $req->content( $json->encode({ apiToken => $self->api_token }) );
+    $req->content( $self->_encode_json({ apiToken => $self->api_token }) );
 
-    return $json->decode( $self->agent->request( $req )->decoded_content );
+    return $self->_request( $req );
 }
 
 method _get_request($url) {
-    my $req = $self->_request('GET', $url);
-
-    my $response = $self->agent->request( $req );
-
-    return $json->decode( $response->decoded_content );
+    my $req = $self->_build_request('GET', $url);
+    return $self->_request( $req );
 }
 
-method _request($type, $url) {
+# I don't like the name here, but this makes our request, and decodes
+# the JSON-filled result
+
+method _request($req) {
+    return $self->_decode_json($self->agent->request( $req )->decoded_content);
+}
+
+method _build_request($type, $url) {
 
     my $req = HTTP::Request->new( $type, URL_BASE . $url );
-    $req->header( 'Content-Type' => 'application/json');
-    $req->header( 'x-api-user'   => $self->user_id    );
-    $req->header( 'x-api-key'    => $self->api_token  );
+    $req->header( 'Content-Type'    => 'application/json');
+    $req->header( 'x-api-user'      => $self->user_id    );
+    $req->header( 'x-api-key'       => $self->api_token  );
 
     return $req;
+}
+
+my $json = JSON::Any->new;
+
+method _decode_json($string) {
+    $self->_last_json($string);         # For debugging
+    return $json->decode( $string );
+}
+
+method _encode_json($string) {
+    return $json->encode( $string );
 }
 
 1;
