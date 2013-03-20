@@ -18,6 +18,7 @@ if (not @ARGV) {
     hrpg status                  : Show current HP/XP/GP
     hrpg tasks                   : Show current tasks
     hrpg habit|daily|reward|todo : Show tasks of current type
+    hrpg new                     : Create new task 'hrpg new' for help.
     };
 
     exit 1;
@@ -58,6 +59,34 @@ given ($cmd) {
     when ('tasks') {
         my $tasks = $hrpg->user_tasks();
         say Dumper $tasks;
+    }
+
+    when ('new') {
+        my ($type, $direction, $text, $note, $value) = @ARGV;
+        my ($up, $down) = (0, 0);
+
+        # TODO: Support rewards (which have 'value')
+
+        my $usage_text = qq{Usage: $0 new [habit|todo|daily] +- "name" ["note"]\n};
+
+        unless ($type and $direction and $text  ) { die $usage_text; }
+        if     ($type !~ /^(?:habit|todo|daily)/) { die $usage_text; }
+        if     ($direction !~ /^[+-]+$/         ) { die $usage_text; }
+
+        if ($direction =~ /\+/) { $up   = 1; }
+        if ($direction =~ /\-/) { $down = 1; }
+
+        $note //= "";
+
+        my $result = $hrpg->new_task(
+            type => $type,
+            text => $text,
+            note => $note,
+            up   => $up,
+            down => $down,
+        );
+
+        say Dumper $result;
     }
 
 }
