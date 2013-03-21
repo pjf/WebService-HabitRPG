@@ -16,12 +16,16 @@ if (not @ARGV) {
     say q{
     Usage:
 
-    hrpg dump                    : Dump entire user info
     hrpg status                  : Show current HP/XP/GP
     hrpg tasks                   : Show current tasks
     hrpg habit|daily|reward|todo : Show tasks of current type
     hrpg new                     : Create new task 'hrpg new' for help.
     hrpg [+-] task               : Increment/decrement a task or habit
+
+    Debugging commands:
+    
+    hrpg dump                    : Dump entire user info
+    hrpg dump tasks              : Dump task info
     };
 
     exit 1;
@@ -44,7 +48,21 @@ my $hrpg = WebService::HabitRPG->new(
 my $cmd = shift @ARGV;
 
 given ($cmd) {
-    when ('dump')   { say Dumper $hrpg->user; }
+    when ('dump')   { 
+
+        my ($option) = @ARGV;
+
+        if (not $option) {
+            say Dumper $hrpg->user; 
+        }
+        elsif ($option eq 'tasks') {
+            say Dumper $hrpg->tasks;
+        }
+        else {
+            say "Did you mean `$0 dump tasks`?";
+            exit 1;
+        }
+    }
 
     when ('status') {
         my $user = $hrpg->user;
