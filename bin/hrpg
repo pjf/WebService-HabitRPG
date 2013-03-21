@@ -29,6 +29,24 @@ Usage:
 
 =head1 SETUP
 
+=head2 Installation
+
+If you have not already installed this software, the easiest way
+is to use L<cpanm> and L<local::lib>. If you don't have them installed,
+it's easy with:
+
+    curl -L http://cpanmin.us/ | perl - --self-upgrade
+    ~/perl5/bin/cpanm -L ~/perl5 App::local::lib::helper
+    source ~/perl5/bin/localenv-bashrc
+
+You might want to put that last line in your F<~/.bashrc> file.
+
+You can then install C<hrpg> and related utilities with:
+
+    cpanm hrpg
+
+=head2 Configuration
+
 Create a F<.habitrpgrc> file in your home directory. Place in it
 the following lines:
 
@@ -41,10 +59,11 @@ going to I<Settings -> API> in the HabitRPG web interface.
 
 =head1 DESCRIPTION
 
-This is a command-line client for the L<HabitRPG|http://habitrpg.com/> service.
+This is a command-line client for the L<HabitRPG|http://habitrpg.com/>
+service.  Use C<hrpg> with no arguments for help.
 
-When using C<hrpg + task> and C<hrpg - task> any unique shortening of the task
-name can be used.
+When using C<hrpg + task> and C<hrpg - task> any unique shortening of the
+task name can be used.
 
 =head1 BUGS
 
