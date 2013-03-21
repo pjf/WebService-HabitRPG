@@ -56,7 +56,7 @@ Note that when data structures are returned, they are almost
 always straight conversions from the JSON returned by the
 HabitRPG API.
 
-=for Pod::Coverage BUILD DEMOLISH
+=for Pod::Coverage BUILD DEMOLISH api_token user_id agent
 
 =cut
 
