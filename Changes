@@ -2,6 +2,8 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * DOCUMENTATION: Added setup instructions to `hrpg`.
+
 0.01      2013-03-21 17:36:52 Australia/Melbourne
 
     * First release!
