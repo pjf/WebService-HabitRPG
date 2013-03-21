@@ -14,7 +14,7 @@ use Data::Dumper;
 
 =head1 SYNOPSIS
 
-    Usage:
+Usage:
 
     hrpg status                  : Show current HP/XP/GP
     hrpg tasks                   : Show current tasks
@@ -26,6 +26,18 @@ use Data::Dumper;
     
     hrpg dump                    : Dump entire user info
     hrpg dump tasks              : Dump task info
+
+=head1 SETUP
+
+Create a F<.habitrpgrc> file in your home directory. Place in it
+the following lines:
+
+    [auth]
+    user_id   = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    api_token = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+Replace the long strings of 'x's with the values you obtain by
+going to I<Settings -> API> in the HabitRPG web interface.
 
 =head1 DESCRIPTION
 
