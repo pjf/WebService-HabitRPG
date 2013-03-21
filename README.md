@@ -1,12 +1,8 @@
 # WebService::HabitRPG - Perl interface to the HabitRPG API
 
-Currently under development. If you're super-eager:
+## To install (stable version)
 
-* Fork this repository
-* Install Dist::Zilla (`cpanm Dist::Zilla`)
-* `dzil build`
-
-You can install the built module with `cpanm WebService-HabitRPG-*.tar.gz`
+    cpanm WebService::HabitRPG
 
 You'll probably find it useful to have a `~/.habitrpgrc` file that
 looks like the following:
@@ -18,3 +14,11 @@ looks like the following:
 You can get these values by going to Settings -> API in HabitRPG.
 
 Use `hrng` without any arguments to see command line help.
+
+## To develop / contribute
+
+* Fork this repository
+* Install Dist::Zilla (`cpanm Dist::Zilla`)
+* `dzil build`
+
+You can install the built module with `cpanm WebService-HabitRPG-*.tar.gz`
