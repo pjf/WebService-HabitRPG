@@ -106,6 +106,32 @@ method updown(
     return $self->_request( $req );
 }
 
+# NOTE: We exclude rewards
+# NOTE: This returns a list of data structures.
+# NOTE: Case insensitive search
+
+method search_tasks($search_term) {
+    my $tasks = $self->user_tasks;
+    my @matches;
+
+    foreach my $task (@$tasks) {
+
+        next if $task->{type} eq 'reward';
+
+        # If our search term exactly matches a task ID, then use
+        # that.
+
+        if ($task->{id} eq $search_term) {
+            return $task;
+        }
+
+        if ($task->{text} =~ /\Q$search_term\E/i) {
+            push(@matches, $task);
+        }
+    }
+    return @matches;
+}
+
 method _get_request($url) {
     my $req = $self->_build_request('GET', $url);
     return $self->_request( $req );
