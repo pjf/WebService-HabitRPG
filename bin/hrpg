@@ -56,12 +56,28 @@ given ($cmd) {
 
     when (/^(?<type>habit|todo|daily|reward)$/) {
         my $tasks = $hrpg->user_tasks($+{type});
-        say Dumper $tasks;
+
+        foreach my $task (@$tasks) {
+            next if $task->{type} eq 'todo' and $task->{completed};
+            say format_task($task);
+        }
     }
 
     when ('tasks') {
         my $tasks = $hrpg->user_tasks();
-        say Dumper $tasks;
+
+        my $last_type = "";
+
+        foreach my $task (@$tasks) {
+            next if $task->{type} eq 'reward';
+            next if $task->{type} eq 'todo' and $task->{completed};
+
+            if ($task->{type} ne $last_type) {
+                say "\n === \u$task->{type} ===\n";
+            }
+            say format_task($task);
+            $last_type = $task->{type};
+        }
     }
 
     when (/^[+-]$/) {
@@ -118,5 +134,35 @@ given ($cmd) {
 
         say Dumper $result;
     }
+}
 
+# TODO: Move these to the API module? Maybe?
+
+# Formats todo/daily tasks with checkmarks. Everything else gets bullets.
+
+sub format_task {
+    my ($task) = @_;
+
+    my $formatted = "";
+
+    if ($task->{type} =~ /^(?:daily|todo)$/) {
+        if ($task->{completed}) {
+            $formatted .= '[X] ';
+        }
+        else {
+            $formatted .= '[ ] ';
+        }
+    }
+    elsif ($task->{type} eq 'habit') {
+        $formatted .= ' ';
+        $formatted .= $task->{up}   ? "+"  : " "  ;
+        $formatted .= $task->{down} ? "- " : "  " ;
+    }
+    else {
+        $formatted .= "  * ";
+    }
+
+    $formatted .= $task->{text};
+
+    return $formatted;
 }
