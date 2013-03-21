@@ -19,6 +19,7 @@ if (not @ARGV) {
     hrpg tasks                   : Show current tasks
     hrpg habit|daily|reward|todo : Show tasks of current type
     hrpg new                     : Create new task 'hrpg new' for help.
+    hrpg [+-] task               : Increment/decrement a task or habit
     };
 
     exit 1;
@@ -59,6 +60,15 @@ given ($cmd) {
     when ('tasks') {
         my $tasks = $hrpg->user_tasks();
         say Dumper $tasks;
+    }
+
+    when (/^[+-]$/) {
+        my ($task) = @ARGV;
+        die "Usage: $0 $_ task\n" if not $task;
+
+        my $direction = $_ eq '+' ? 'up' : 'down';
+        my $return = $hrpg->updown($task, $direction);
+        say Dumper $return;
     }
 
     when ('new') {
