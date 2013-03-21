@@ -13,7 +13,7 @@ looks like the following:
 
 You can get these values by going to Settings -> API in HabitRPG.
 
-Use `hrng` without any arguments to see command line help.
+Use `hrpg` without any arguments to see command line help.
 
 You can find documention of the stable release on the CPAN:
 
