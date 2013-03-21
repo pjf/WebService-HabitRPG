@@ -101,11 +101,7 @@ method updown(
     $direction! where qr{up|down}
 ) {
 
-    my $url = 'https://habitrpg.com/v1/users/' . $self->user_id . '/tasks/' . $task . '/' . $direction;
-
-    my $req = HTTP::Request->new( 'POST', $url);
-    $req->header( 'Content-Type' => 'application/json');
-    $req->content( $self->_encode_json({ apiToken => $self->api_token }) );
+    my $req = $self->_build_request('POST', "/user/tasks/$task/$direction");
 
     return $self->_request( $req );
 }
