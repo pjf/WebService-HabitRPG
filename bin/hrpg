@@ -12,6 +12,39 @@ use Data::Dumper;
 
 # VERSION
 
+=head1 SYNOPSIS
+
+    Usage:
+
+    hrpg status                  : Show current HP/XP/GP
+    hrpg tasks                   : Show current tasks
+    hrpg habit|daily|reward|todo : Show tasks of current type
+    hrpg new                     : Create new task 'hrpg new' for help.
+    hrpg [+-] task               : Increment/decrement a task or habit
+
+    Debugging commands:
+    
+    hrpg dump                    : Dump entire user info
+    hrpg dump tasks              : Dump task info
+
+=head1 DESCRIPTION
+
+This is a command-line client for the L<HabitRPG|http://habitrpg.com/> service.
+
+When using C<hrpg + task> and C<hrpg - task> any unique shortening of the task
+name can be used.
+
+=head1 BUGS
+
+I'm sure there are plenty! Please view and/or record them at
+L<https://github.com/pfenwick/WebService-HabitRPG/issues> .
+
+=head1 SEE ALSO
+
+L<WebService::HabitRPG>
+
+=cut
+
 if (not @ARGV) {
     say q{
     Usage:

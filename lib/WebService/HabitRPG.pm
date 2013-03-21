@@ -362,6 +362,8 @@ L<https://github.com/pfenwick/WebService-HabitRPG/issues> .
 
 The L<HabitRPG API spec|https://github.com/lefnire/habitrpg/wiki/API>.
 
+The L<hrpg> command-line client. It's freakin' awesome.
+
 =cut
 
 1;
