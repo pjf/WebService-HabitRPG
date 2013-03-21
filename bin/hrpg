@@ -132,6 +132,7 @@ given ($cmd) {
         my $user = $hrpg->user;
 
         my $name =  $user->{profile}{name}
+                 || $user->{auth}{facebook}{displayName}
                  || $user->{auth}{local}{username}
                  || 'adventurer';
 
