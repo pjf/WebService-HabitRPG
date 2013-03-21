@@ -24,6 +24,38 @@ use JSON::Any;
         user_id   => 'your-user-id-goes-here',
     );
 
+    # Get everyting about the user
+    my $user = $hrpg->user;
+
+    # Get all tasks.
+    my $tasks = $hrpg->tasks;
+
+    # Get all tasks of a particular type (eg: 'daily')
+    my $daily = $hrpg->tasks('daily');
+
+    # Increment/decrement a task
+    $hrpg->up($task_id);
+    $hrpg->down($task_id);
+
+    # Make a new task
+    $hrpg->new_task(
+        type => 'daily',
+        text => 'floss teeth',
+        up   => 1,
+        down => 0,
+    );
+
+=head1 DESCRIPTION
+
+Interface to API provided by L<HabitRPG|http://habitrpg.com/>.
+
+At the time of release, the HabitRPG API is still under construction.
+This module may change as a result.
+
+Note that when data structures are returned, they are almost
+always straight conversions from the JSON returned by the
+HabitRPG API.
+
 =for Pod::Coverage BUILD DEMOLISH
 
 =cut
@@ -51,7 +83,51 @@ sub BUILD {
     return;
 }
 
+=method user
+
+    my $user = $hrpg->user();
+
+Returns everything from the C</user> route in the HabitRPG API.
+This is practically everything about the user, their tasks, scores,
+and other information.
+
+The Perl data structure that is returned is a straight conversion
+from the JSON provided by the HabitRPG API.
+
+=cut
+
 method user()       { return $self->_get_request( '/user'        ); }
+
+=method tasks
+
+    my $tasks  = $hrpg->tasks();            # All tasks
+    my $habits = $hrpg->tasks('habit');     # Only habits
+
+Return a reference to an array of tasks. With no arguments, all
+tasks (habits, dailies, todos and rewards) are returned. With
+an argument, only tasks of the given type are returned. The
+argument must be one of C<habit>, C<daily>, C<todo> or C<reward>.
+
+The data returned for each task is defined by the HabitRPG API, but
+at the time of writing is:
+
+    {
+        text    => 'floss', # Text shown in web interface. Task name.
+        type    => 'habit', # One of: habit, todo, daily, reward
+        id      => '...',   # Internal task ID. Extensively used by API.
+        value   => 0,       # Either cost in GP, or how well one is doing
+        notes   => '',      # Extended, human-readable note field
+        repeat  => {...},   # Daily tasks only. 
+        up      => 1,       # Can this task be incremented?
+        down    => 0,       # Can this task be decremented?
+        history => [...],   # History data for this task.
+    }
+
+Not all tasks will have all fields.  Using the L<hrpg> command-line
+tool with C<hrpg dump tasks> is a convenient way to see the
+data structures returned by this method.
+
+=cut
 
 method tasks($type where qr{^(?: habit | daily | todo | reward | )$}x = "") {
     if ($type) {
@@ -60,9 +136,46 @@ method tasks($type where qr{^(?: habit | daily | todo | reward | )$}x = "") {
     return $self->_get_request( "/user/tasks" ); 
 }
 
+=method get_task
+
+    my $task = $hrpg->get_task('6a11dd4d-c2d6-42b7-b9ff-f562d4ccce4e');
+
+Given a task ID, returns information on that task in the same format
+at L</tasks> above.
+
+=cut
+
 method get_task($task_id) {
     return $self->_get_request("/user/task/$task_id");
 }
+
+=method new_task
+
+    $hrpg->new_task(
+        type      => 'daily',           # Required
+        text      => 'floss teeth',     # Required
+        up        => 1,                 # Suggested, defaults true
+        down      => 0,                 # Suggested, defaults true
+        value     => 0,
+        note      => "Floss every tooth for great justice",
+        completed => 0,
+    );
+
+Creates a new task. Only the C<type> and C<text> arguments are
+required, all other tasks are optional. The C<up> and C<down>
+options default to true (ie, tasks can be both incremented and
+decremented).
+
+The C<type> parameter must be one of: C<habit>, C<daily>,
+C<todo> or C<reward>.
+
+Returns a task data structure of the task created, identical
+to the L</tasks> method above.
+
+Creating tasks that can be neither incremented nor decremented
+is of dubious usefulness.
+
+=cut
 
 method new_task(
     :$type! where qr{^(?: habit | daily | todo | reward )$}x,
@@ -102,11 +215,23 @@ method new_task(
 
 }
 
-# Convenience methods
-method up  ($task) { return $self->updown($task, 'up'  ); }
-method down($task) { return $self->updown($task, 'down'); }
+=method updown
 
-# Returns: {"exp":11,"gp":12.416828586491677,"hp":50,"lvl":2,"delta":1}
+    $hrpg->updown('6a11dd4d-c2d6-42b7-b9ff-f562d4ccce4e', 'up'  );
+    $hrpg->updown('6a11dd4d-c2d6-42b7-b9ff-f562d4ccce4e', 'down');
+
+Moves the habit in the direction specified. Returns a data structure
+of character status:
+
+    {
+        exp   => 11,
+        gp    => 15.5,
+        hp    => 50,
+        lv    => 2,
+        delta => 1,
+    }
+
+=cut
 
 method updown(
     $task!,
@@ -117,6 +242,55 @@ method updown(
 
     return $self->_request( $req );
 }
+
+=method up
+
+    $hrpg->up($task);
+
+Convenience method. Equivalent to C<$hrpg->updown($task, 'up')>;
+
+=method down
+
+    $hrpg->down($task);
+
+Convenience method. Equivalent to C<$hrpg->updown($task, 'down')>;
+
+=cut
+
+# Convenience methods
+method up  ($task) { return $self->updown($task, 'up'  ); }
+method down($task) { return $self->updown($task, 'down'); }
+
+=method search_tasks
+
+    my @tasks = $hrpg->search_tasks($search_term);
+
+    # Eg:
+    my @tasks = $hrpg->search_tasks('floss');
+
+Search for tasks which match the provided search term. If the
+search term C<exactly> matches a task ID, then the task ID
+is returned. Otherwise, returns a list of tasks which contain
+the search term in their names (the C<text> field returned by the API).
+This list is in the same format as the as the L</tasks> method call.
+
+The search term is treated in a literal, case-insensitive fashion.
+
+This is useful for providing a human-friendly way to refer to
+tasks.  For example:
+
+    # Search for a user-provided term
+    my @tasks = $hrpg->search_tasks($term);
+    
+    # Increment task if found
+    if (@tasks == 1) {
+        $hrpg->up($tasks[0]{id});
+    }
+    else {
+        say "Too few or too many tasks found.";
+    }
+
+=cut
 
 # NOTE: We exclude rewards
 # NOTE: This returns a list of data structures.
@@ -143,6 +317,8 @@ method search_tasks($search_term) {
     }
     return @matches;
 }
+
+#### Internal use only code beyond this point ####
 
 method _get_request($url) {
     my $req = $self->_build_request('GET', $url);
@@ -176,5 +352,14 @@ method _decode_json($string) {
 method _encode_json($string) {
     return $json->encode( $string );
 }
+
+=head1 BUGS
+
+I'm sure there are plenty! Please view and/or record them at
+L<https://github.com/pfenwick/WebService-HabitRPG/issues> .
+
+=head1 SEE ALSO
+
+The L<HabitRPG API spec|https://github.com/lefnire/habitrpg/wiki/API>.
 
 1;
