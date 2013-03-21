@@ -55,7 +55,7 @@ given ($cmd) {
     }
 
     when (/^(?<type>habit|todo|daily|reward)$/) {
-        my $tasks = $hrpg->user_tasks($+{type});
+        my $tasks = $hrpg->tasks($+{type});
 
         foreach my $task (@$tasks) {
             next if $task->{type} eq 'todo' and $task->{completed};
@@ -64,7 +64,7 @@ given ($cmd) {
     }
 
     when ('tasks') {
-        my $tasks = $hrpg->user_tasks();
+        my $tasks = $hrpg->tasks();
 
         my $last_type = "";
 
