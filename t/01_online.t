@@ -5,6 +5,10 @@ use WebService::HabitRPG;
 use Config::Tiny;
 use Test::More;
 
+if (not $ENV{AUTHOR_TESTING}) {
+    plan skip_all => "Author only tests... skipping";
+}
+
 my $config = Config::Tiny->read( "$ENV{HOME}/.habitrpgrc" );
 
 if (not $config->{auth}{testing}) {
