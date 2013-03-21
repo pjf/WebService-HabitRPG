@@ -111,7 +111,13 @@ given ($cmd) {
 
     when ('status') {
         my $user = $hrpg->user;
-        say "Hark, $user->{profile}{name}! (Lv $user->{stats}{lvl})";
+
+        my $name =  $user->{profile}{name}
+                 || $user->{auth}{local}{username}
+                 || 'adventurer';
+
+        say "Hark, $name! (Lv $user->{stats}{lvl})";
+
         say "HP: $user->{stats}{hp} / $user->{stats}{maxHealth}";
         say "XP: $user->{stats}{exp} / $user->{stats}{toNextLevel}";
         say "GP: $user->{stats}{gp}";

@@ -2,6 +2,9 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * BUGFIX: `hrpg status` no longer displays a warning when
+              it can't figure out the user's name.
+
 0.02      2013-03-21 17:43:12 Australia/Melbourne
 
     * DOCUMENTATION: Added setup instructions to `hrpg`.
