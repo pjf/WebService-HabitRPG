@@ -362,4 +362,6 @@ L<https://github.com/pfenwick/WebService-HabitRPG/issues> .
 
 The L<HabitRPG API spec|https://github.com/lefnire/habitrpg/wiki/API>.
 
+=cut
+
 1;
