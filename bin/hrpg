@@ -134,6 +134,12 @@ given ($cmd) {
 
         say Dumper $result;
     }
+
+    default {
+        say "\nSorry, I didn't understand what you were asking for!";
+        say "Try $0 with no arguments for help.\n";
+        exit 1;
+    }
 }
 
 # TODO: Move these to the API module? Maybe?
