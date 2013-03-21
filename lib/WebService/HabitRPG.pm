@@ -297,7 +297,7 @@ tasks.  For example:
 # NOTE: Case insensitive search
 
 method search_tasks($search_term) {
-    my $tasks = $self->user_tasks;
+    my $tasks = $self->tasks;
     my @matches;
 
     foreach my $task (@$tasks) {
