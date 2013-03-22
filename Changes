@@ -3,8 +3,11 @@ Revision history for WebService::HabitRPG
 {{$NEXT}}
 
     * FEATURE: Can specify API base when creating objects.
+
     * FEATURE: hrpg will honour ENV{HRPG_API_BASE} if set.
                (For debugging lefnire/habitrpg#680)
+
+    * FEATURE: `hrpg status` has a nicer gold display (GH #4, ta @taryneast)
 
 0.03      2013-03-22 00:14:12 Australia/Melbourne
 

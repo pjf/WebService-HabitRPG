@@ -153,7 +153,12 @@ given ($cmd) {
 
         say "HP: $user->{stats}{hp} / $user->{stats}{maxHealth}";
         say "XP: $user->{stats}{exp} / $user->{stats}{toNextLevel}";
-        say "GP: $user->{stats}{gp}";
+
+        # Pretty-printing of money
+        my $raw_gp = sprintf("%.4f", $user->{stats}{gp});
+        ($raw_gp =~ /^(?<gp>\d+)\.(?<sp>\d{2})(?<cp>\d{2})$/);
+
+        printf "GP: %d | SP: %2d | CP: %2d\n",$+{gp}, $+{sp}, $+{cp};
     }
 
     when (/^(?<type>habit|todo|daily|reward)$/) {
