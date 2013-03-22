@@ -6,6 +6,14 @@ use WebService::HabitRPG;
 use Config::Tiny;
 use Data::Dumper;
 
+# Idonethis detection code.
+my $IDT_VERSION = 0;
+
+eval {
+    require WebService::Idonethis; 
+    $IDT_VERSION = WebService::Idonethis->VERSION;
+};
+
 # PODNAME: hrpg
 
 # ABSTRACT: hrpg - Command line interface to HabitRPG
@@ -65,6 +73,24 @@ service.  Use C<hrpg> with no arguments for help.
 When using C<hrpg + task> and C<hrpg - task> any unique shortening of the
 task name can be used.
 
+=head1 INTEGRATION WITH IDONETHIS
+
+If you have L<WebService::Idonethis> installed, then you can add
+items to your done-list at the same time as you complete habits.
+This is done by adding an extra argument to the C<+> or C<->
+calls to hrpg:
+
+    hrpg + bugfix   "Recalibrated the flux capacitor."
+    hrpg - junkfood "Won the local doughnut eating competition."
+
+This integration is extraordinarily simple for now. We simply
+call out to the L<idone> command-line tool with all additional
+arugments given. If you're an C<idone> power user, this means
+you can use switches like C<-l>.
+
+If L<WebService::Idonethis> is not installed, any additional arguments
+to habit reporting are ignored.
+
 =head1 ENVIRONMENT
 
 If the C<HRPG_API_BASE> environment variable is set, it will be used as
@@ -90,7 +116,7 @@ if (not @ARGV) {
     hrpg tasks                   : Show current tasks
     hrpg habit|daily|reward|todo : Show tasks of current type
     hrpg new                     : Create new task 'hrpg new' for help.
-    hrpg [+-] task               : Increment/decrement a task or habit
+    hrpg [+-] task [comment]     : Increment/decrement a task or habit
 
     Debugging commands:
     
@@ -188,7 +214,7 @@ given ($cmd) {
     }
 
     when (/^[+-]$/) {
-        my ($task_name) = @ARGV;
+        my ($task_name, @comment) = @ARGV;
         die "Usage: $0 $_ task\n" if not $task_name;
 
         my $direction = $_ eq '+' ? 'up' : 'down';
@@ -201,6 +227,14 @@ given ($cmd) {
 
             my $return = $hrpg->updown($task->{id}, $direction);
             say Dumper $return;
+
+            if (@comment and $IDT_VERSION) {
+                system('idone',@comment);
+            }
+            else {
+                say "Comment ignored, WebService::Idonethis not installed.";
+            }
+
         }
         elsif (@candidates == 0) {
             say "No task matching '$task_name' found";
