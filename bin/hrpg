@@ -175,7 +175,7 @@ given ($cmd) {
                  || $user->{auth}{local}{username}
                  || 'adventurer';
 
-        say "Hark, $name! (Lv $user->{stats}{lvl})";
+        say "\nHark, $name! (Lv $user->{stats}{lvl})\n";
 
         say "HP: $user->{stats}{hp} / $user->{stats}{maxHealth}";
         say "XP: $user->{stats}{exp} / $user->{stats}{toNextLevel}";
@@ -184,7 +184,7 @@ given ($cmd) {
         my $raw_gp = sprintf("%.4f", $user->{stats}{gp});
         ($raw_gp =~ /^(?<gp>\d+)\.(?<sp>\d{2})(?<cp>\d{2})$/);
 
-        printf "GP: %d | SP: %2d | CP: %2d\n",$+{gp}, $+{sp}, $+{cp};
+        printf "GP: %d | SP: %2d | CP: %2d\n\n",$+{gp}, $+{sp}, $+{cp};
     }
 
     when (/^(?<type>habit|todo|daily|reward)$/) {
