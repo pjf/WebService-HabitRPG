@@ -65,6 +65,12 @@ service.  Use C<hrpg> with no arguments for help.
 When using C<hrpg + task> and C<hrpg - task> any unique shortening of the
 task name can be used.
 
+=head1 ENVIRONMENT
+
+If the C<HRPG_API_BASE> environment variable is set, it will be used as
+the API base URL. This may be useful in testing, or when working with
+other servers.
+
 =head1 BUGS
 
 I'm sure there are plenty! Please view and/or record them at
@@ -104,9 +110,16 @@ unless ($config->{auth}{api_token}) {
     die "Cannot find user credentials in $config_file\n";
 }
 
+my @bonus_constructor_args;
+
+if ($ENV{HRPG_API_BASE}) {
+    @bonus_constructor_args = ( api_base => $ENV{HRPG_API_BASE} );
+}
+
 my $hrpg = WebService::HabitRPG->new(
     api_token => $config->{auth}{api_token},
     user_id   => $config->{auth}{user_id},
+    @bonus_constructor_args,
 );
 
 my $cmd = shift @ARGV;

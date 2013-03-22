@@ -58,14 +58,30 @@ HabitRPG API.
 
 =for Pod::Coverage BUILD DEMOLISH api_token user_id agent
 
+=method new
+
+    my $hrpg = WebService::HabitRPG->new(
+        api_token => 'your-token-goes-here',
+        user_id   => 'your-user-id-goes-here',
+    );
+
+Creates a new C<WebService::HabitRPG> object. The C<api_token> and C<user_id>
+parameters are mandatory. You may also pass your own L<WWW::Mechanize>
+compatible user-agent with C<agent>, and should you need it your own HabitRPG
+API base URL with C<api_base> (useful for testing, or if you're running your
+own server).
+
+By default, the official API base of C<https://habitrpg.com/api/v1> is used.
+
 =cut
 
 has 'api_token'  => (is => 'ro'); # aka x-api-key
 has 'user_id'    => (is => 'ro'); # aka x-api-user
 has 'agent'      => (is => 'rw');
+has 'api_base'   => (is => 'ro', default => sub { 'https://habitrpg.com/api/v1' });
 has '_last_json' => (is => 'rw'); # For debugging
 
-use constant URL_BASE => 'https://habitrpg.com/api/v1';
+# use constant URL_BASE => 'https://habitrpg.com/api/v1';
 
 sub BUILD {
     my ($self, $args) = @_;
@@ -334,7 +350,7 @@ method _request($req) {
 
 method _build_request($type, $url) {
 
-    my $req = HTTP::Request->new( $type, URL_BASE . $url );
+    my $req = HTTP::Request->new( $type, $self->api_base . $url );
     $req->header( 'Content-Type'    => 'application/json');
     $req->header( 'x-api-user'      => $self->user_id    );
     $req->header( 'x-api-key'       => $self->api_token  );
