@@ -56,8 +56,6 @@ Note that when data structures are returned, they are almost
 always straight conversions from the JSON returned by the
 HabitRPG API.
 
-=for Pod::Coverage BUILD DEMOLISH api_token user_id agent
-
 =method new
 
     my $hrpg = WebService::HabitRPG->new(
@@ -72,6 +70,8 @@ API base URL with C<api_base> (useful for testing, or if you're running your
 own server).
 
 By default, the official API base of C<https://habitrpg.com/api/v1> is used.
+
+=for Pod::Coverage BUILD DEMOLISH api_token user_id agent api_base
 
 =cut
 
