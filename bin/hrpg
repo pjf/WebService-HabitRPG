@@ -234,13 +234,14 @@ given ($cmd) {
             my $return = $hrpg->updown($task->{id}, $direction);
             say Dumper $return;
 
-            if (@comment and $IDT_VERSION) {
-                system('idone',@comment);
+            if (@comment) {
+                if ($IDT_VERSION) {
+                    system('idone',@comment);
+                }
+                else {
+                    say "Comment ignored, WebService::Idonethis not installed.";
+                }
             }
-            else {
-                say "Comment ignored, WebService::Idonethis not installed.";
-            }
-
         }
         elsif (@candidates == 0) {
             say "No task matching '$task_name' found";

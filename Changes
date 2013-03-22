@@ -3,6 +3,7 @@ Revision history for WebService::HabitRPG
 {{$NEXT}}
 
     * FEATURE: General beautification of hrpg output.
+    * BUGFIX:  Fixed spurious 'comment ignored' message in hrpg.
 
 0.05      2013-03-22 14:18:25 Australia/Melbourne
 
