@@ -3,6 +3,7 @@ Revision history for WebService::HabitRPG
 {{$NEXT}}
 
     * DOCS:    Updated links from github.com/pfenwick -> github.com/pjf
+    * BUGFIX:  Completed tasks are no longer considered for `hrpg +` (GH #6)
 
 0.06      2013-03-23 10:11:49 Australia/Melbourne
 

@@ -292,6 +292,11 @@ This list is in the same format as the as the L</tasks> method call.
 
 The search term is treated in a literal, case-insensitive fashion.
 
+Tasks which are marked as I<completed> are I<not> considered by
+this search. This behaviour I<may> change in future, where parameters
+may be passed to indicate what should happen with regards to
+completed tasks.
+
 This is useful for providing a human-friendly way to refer to
 tasks.  For example:
 
@@ -319,6 +324,7 @@ method search_tasks($search_term) {
     foreach my $task (@$tasks) {
 
         next if $task->{type} eq 'reward';
+        next if $task->{completed};
 
         # If our search term exactly matches a task ID, then use
         # that.
