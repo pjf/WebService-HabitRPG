@@ -372,7 +372,7 @@ method _encode_json($string) {
 =head1 BUGS
 
 I'm sure there are plenty! Please view and/or record them at
-L<https://github.com/pfenwick/WebService-HabitRPG/issues> .
+L<https://github.com/pjf/WebService-HabitRPG/issues> .
 
 =head1 SEE ALSO
 
