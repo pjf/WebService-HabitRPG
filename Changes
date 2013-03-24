@@ -2,6 +2,8 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+0.08      2013-03-24 14:58:01 Australia/Melbourne
+
     * FEATURE: Current XP/HP/GP (with deltas) are shown when completing tasks with +/-
 
 0.07      2013-03-23 16:22:16 Australia/Melbourne
