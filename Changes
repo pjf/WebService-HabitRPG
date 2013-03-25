@@ -3,6 +3,7 @@ Revision history for WebService::HabitRPG
 {{$NEXT}}
 
     * DOCS:    hrpg help screen now mentions `perldoc hrpg`.
+    * DOCS:    Updated the help display for `hrpg +` (GH #9)
 
 0.08      2013-03-24 14:58:01 Australia/Melbourne
 

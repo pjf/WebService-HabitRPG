@@ -223,7 +223,7 @@ given ($cmd) {
 
     when (/^[+-]$/) {
         my ($task_name, @comment) = @ARGV;
-        die "Usage: $PROGNAME $_ task\n" if not $task_name;
+        die "Usage: $PROGNAME $_ task [comment]\n" if not $task_name;
 
         my $direction = $_ eq '+' ? 'up' : 'down';
 
