@@ -123,6 +123,8 @@ if (not @ARGV) {
     
     hrpg dump                    : Dump entire user info
     hrpg dump tasks              : Dump task info
+
+    For more documentation, use `perldoc hrpg`.
     };
 
     exit 1;
