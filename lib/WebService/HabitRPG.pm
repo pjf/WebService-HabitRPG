@@ -5,7 +5,7 @@ use warnings;
 use autodie;
 use Moo;
 use WWW::Mechanize;
-use Method::Signatures;
+use Method::Signatures 20121201;
 use JSON::Any;
 
 # ABSTRACT: Perl interface to the HabitRPG API
