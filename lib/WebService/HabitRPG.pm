@@ -279,10 +279,11 @@ method down($task) { return $self->updown($task, 'down'); }
 
 =method search_tasks
 
-    my @tasks = $hrpg->search_tasks($search_term);
+    my @tasks = $hrpg->search_tasks($search_term, all => $bool);
 
     # Eg:
     my @tasks = $hrpg->search_tasks('floss');
+    my @tasks = $hrpg->search_tasks('git', all => 1);
 
 Search for tasks which match the provided search term. If the
 search term C<exactly> matches a task ID, then the task ID
@@ -292,10 +293,8 @@ This list is in the same format as the as the L</tasks> method call.
 
 The search term is treated in a literal, case-insensitive fashion.
 
-Tasks which are marked as I<completed> are I<not> considered by
-this search. This behaviour I<may> change in future, where parameters
-may be passed to indicate what should happen with regards to
-completed tasks.
+If the optional C<all> parameter is set, then all tasks are
+returned. Otherwise only non-completed tasks are returned.
 
 This is useful for providing a human-friendly way to refer to
 tasks.  For example:
@@ -317,14 +316,14 @@ tasks.  For example:
 # NOTE: This returns a list of data structures.
 # NOTE: Case insensitive search
 
-method search_tasks($search_term) {
+method search_tasks($search_term, :$all = 0) {
     my $tasks = $self->tasks;
     my @matches;
 
     foreach my $task (@$tasks) {
 
         next if $task->{type} eq 'reward';
-        next if $task->{completed};
+        if ($task->{completed} and not $all) { next; }
 
         # If our search term exactly matches a task ID, then use
         # that.

@@ -5,6 +5,8 @@ Revision history for WebService::HabitRPG
     * DOCS:    hrpg help screen now mentions `perldoc hrpg`.
     * DOCS:    Updated the help display for `hrpg +` (GH #9)
     * BUILD:   Explicitly require a Method::Signatures 20121201 or later.
+    * FEATURE: search_tasks() now allows an 'all' argument.
+    * FEATURE: hrpg now supports the 'history' command.
 
 0.08      2013-03-24 14:58:01 Australia/Melbourne
 

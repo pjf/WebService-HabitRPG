@@ -6,6 +6,7 @@ use WebService::HabitRPG;
 use Config::Tiny;
 use Data::Dumper;
 use File::Spec;
+use POSIX qw(strftime);
 
 # Idonethis detection code.
 my $IDT_VERSION = 0;
@@ -30,6 +31,7 @@ Usage:
     hrpg habit|daily|reward|todo : Show tasks of current type
     hrpg new                     : Create new task 'hrpg new' for help.
     hrpg [+-] task               : Increment/decrement a task or habit
+    hrpg history task            : Show the history of a task
 
     Debugging commands:
     
@@ -218,6 +220,30 @@ given ($cmd) {
             }
             say format_task($task);
             $last_type = $task->{type};
+        }
+    }
+    
+    when ('history') {
+        my ($task_name) = @ARGV;
+
+        my @tasks = $hrpg->search_tasks($task_name, all => 1);
+
+        if (not @tasks) {
+            die "Sorry, no tasks found!\n";
+        }
+
+        foreach my $task (@tasks) {
+            say "\n = ", $task->{text}, " =\n";
+
+            foreach my $hist ( @{ $task->{history} }) {
+
+                # Substr is to work around lefnire/habitrpg#716
+                # This will break in a few thousand years time.
+                my $timestamp = substr($hist->{date},0,10);
+
+                print strftime("[%Y-%m-%d %H:%M]", localtime($timestamp));
+                printf("\t%6.2f\n", $hist->{value});
+            }
         }
     }
 
