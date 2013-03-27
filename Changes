@@ -2,6 +2,9 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * DOCS:    hrpg help screen now mentions history command
+               (Thanks @claudinec, GH #20)
+
 0.10      2013-03-27 15:54:27 Australia/Melbourne
 
     * BUGFIX:  'hrpg history' with no args gives a more useful error message.
