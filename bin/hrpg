@@ -120,6 +120,7 @@ if (not @ARGV) {
     hrpg habit|daily|reward|todo : Show tasks of current type
     hrpg new                     : Create new task 'hrpg new' for help.
     hrpg [+-] task [comment]     : Increment/decrement a task or habit
+    hrpg history task            : Show the history of a task
 
     Debugging commands:
     
