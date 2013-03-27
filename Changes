@@ -5,6 +5,9 @@ Revision history for WebService::HabitRPG
     * DOCS:    hrpg help screen now mentions history command
                (Thanks @claudinec, GH #20)
 
+    * FEATURE: Added --beta switch to 'hrpg', which uses the beta API
+               server.
+
 0.10      2013-03-27 15:54:27 Australia/Melbourne
 
     * BUGFIX:  'hrpg history' with no args gives a more useful error message.

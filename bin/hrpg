@@ -7,6 +7,7 @@ use Config::Tiny;
 use Data::Dumper;
 use File::Spec;
 use POSIX qw(strftime);
+use Getopt::Long qw(GetOptions);
 
 # Idonethis detection code.
 my $IDT_VERSION = 0;
@@ -94,6 +95,9 @@ you can use switches like C<-l>.
 If L<WebService::Idonethis> is not installed, any additional arguments
 to habit reporting are ignored.
 
+The C<--beta> switch may be provided as a first argumet to use
+the beta API server.
+
 =head1 ENVIRONMENT
 
 If the C<HRPG_API_BASE> environment variable is set, it will be used as
@@ -147,10 +151,18 @@ unless ($config->{auth}{api_token}) {
     die "Cannot find user credentials in $config_file\n";
 }
 
+# Options handling.
+
+my $beta;
+GetOptions('beta' => \$beta);       # Use beta API
+
 my @bonus_constructor_args;
 
 if ($ENV{HRPG_API_BASE}) {
     @bonus_constructor_args = ( api_base => $ENV{HRPG_API_BASE} );
+}
+elsif ($beta) {
+    @bonus_constructor_args = ( api_base => 'https://beta.habitrpg.com/api/v1' );
 }
 
 my $hrpg = WebService::HabitRPG->new(
