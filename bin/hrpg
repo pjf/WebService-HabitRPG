@@ -226,6 +226,10 @@ given ($cmd) {
     when ('history') {
         my ($task_name) = @ARGV;
 
+        if (not $task_name) {
+            die "Usage: $PROGNAME history taskname\n";
+        }
+
         my @tasks = $hrpg->search_tasks($task_name, all => 1);
 
         if (not @tasks) {
