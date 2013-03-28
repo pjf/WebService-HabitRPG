@@ -7,7 +7,6 @@ use Config::Tiny;
 use Data::Dumper;
 use File::Spec;
 use POSIX qw(strftime);
-use Getopt::Long qw(GetOptions);
 
 # Idonethis detection code.
 my $IDT_VERSION = 0;
@@ -152,9 +151,15 @@ unless ($config->{auth}{api_token}) {
 }
 
 # Options handling.
+# We could use Getopt::Long, but it gets confused by + and -
+# being commands.
 
-my $beta;
-GetOptions('beta' => \$beta);       # Use beta API
+my $beta = 0;
+
+if ($ARGV[0] eq "--beta") { 
+    $beta = 1;
+    shift @ARGV;
+}
 
 my @bonus_constructor_args;
 
