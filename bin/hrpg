@@ -32,6 +32,7 @@ Usage:
     hrpg new                     : Create new task 'hrpg new' for help.
     hrpg [+-] task               : Increment/decrement a task or habit
     hrpg history task            : Show the history of a task
+    hrpg show task               : Show detailed info about a task
 
     Debugging commands:
     
@@ -124,6 +125,7 @@ if (not @ARGV) {
     hrpg new                     : Create new task 'hrpg new' for help.
     hrpg [+-] task [comment]     : Increment/decrement a task or habit
     hrpg history task            : Show the history of a task
+    hrpg show task               : Show detailed info about a task
 
     Debugging commands:
     
@@ -240,6 +242,28 @@ given ($cmd) {
             $last_type = $task->{type};
         }
     }
+
+    when ('show') {
+
+        # TODO: Integrate history/show search routines.
+
+        my ($task_name) = @ARGV;
+
+        if (not $task_name) {
+            die "Usage: $PROGNAME show taskname\n";
+        }
+
+        my @tasks = $hrpg->search_tasks($task_name, all => 1);
+
+        if (not @tasks) {
+            die "Sorry, no tasks found!\n";
+        }
+
+        foreach my $task (@tasks) {
+            say Dumper $task;
+        }
+    }
+        
     
     when ('history') {
         my ($task_name) = @ARGV;
