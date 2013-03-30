@@ -74,10 +74,19 @@ going to I<Settings -> API> in the HabitRPG web interface.
 This is a command-line client for the L<HabitRPG|http://habitrpg.com/>
 service.  Use C<hrpg> with no arguments for help.
 
-When using C<hrpg + task> and C<hrpg - task> any unique shortening of the
-task name can be used.
+When using the C<+> and C<-> commands, any unique shortening of a
+task name can be used. When using C<history> and C<show>, all
+tasks matching the name specified will be displayed.
 
-=head1 INTEGRATION WITH IDONETHIS
+The C<--beta> switch may be provided as a first argument to use
+the beta API server.
+
+=head1 EXPERIMENTAL FEATURES
+
+These features are considered experimental, and may change in
+the future.
+
+=head2 INTEGRATION WITH IDONETHIS
 
 If you have L<WebService::Idonethis> installed, then you can add
 items to your done-list at the same time as you complete habits.
@@ -95,8 +104,14 @@ you can use switches like C<-l>.
 If L<WebService::Idonethis> is not installed, any additional arguments
 to habit reporting are ignored.
 
-The C<--beta> switch may be provided as a first argumet to use
-the beta API server.
+=head2 CUSTOM ATTRIBUTES
+
+Additional arguments after the I<value> to C<hrpg new> are considered
+to be custom arguments that are sent to the API.  These must be
+key/value pairs, which are encoded into JSON and passed directly
+as-is, without any sanity checking. These can allow tasks to be
+created that may hook into new features on the server, or which contain
+additional information which is not used by the main HabitRPG servers.
 
 =head1 ENVIRONMENT
 
@@ -340,12 +355,12 @@ given ($cmd) {
     }
 
     when ('new') {
-        my ($type, $direction, $text, $note, $value) = @ARGV;
+        my ($type, $direction, $text, $note, $value, @rest) = @ARGV;
         my ($up, $down) = (0, 0);
 
         # TODO: Support rewards (which have 'value')
 
-        my $usage_text = qq{Usage: $PROGNAME new [habit|todo|daily] +- "name" ["note"]\n};
+        my $usage_text = qq{Usage: $PROGNAME new [habit|todo|daily] +- "name" ["note"] [value]\n};
 
         unless ($type and $direction and $text  ) { die $usage_text; }
         if     ($type !~ /^(?:habit|todo|daily)/) { die $usage_text; }
@@ -362,6 +377,7 @@ given ($cmd) {
             note => $note,
             up   => $up,
             down => $down,
+            extend => { @rest },
         );
 
         say Dumper $result;

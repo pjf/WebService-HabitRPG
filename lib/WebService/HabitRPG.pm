@@ -175,6 +175,7 @@ method get_task($task_id) {
         value     => 0,
         note      => "Floss every tooth for great justice",
         completed => 0,
+        extend    => {},
     );
 
 Creates a new task. Only the C<type> and C<text> arguments are
@@ -184,6 +185,11 @@ decremented).
 
 The C<type> parameter must be one of: C<habit>, C<daily>,
 C<todo> or C<reward>.
+
+The C<extend> parameter consists to key/value pairs that will be
+added to the JSON create packet. This should only be used if you
+know what you're doing, and wish to take advantage of new or
+undocumented features in the API.
 
 Returns a task data structure of the task created, identical
 to the L</tasks> method above.
@@ -200,7 +206,8 @@ method new_task(
     :$value = 0,
     :$note = '',
     :$up = 1,
-    :$down = 1
+    :$down = 1,
+    :$extend,
 ) {
 
     # Magical boolification for JSONification.
@@ -221,6 +228,7 @@ method new_task(
         note      => $note,
         up        => $up,
         down      => $down,
+        %$extend,
     });
 
     my $req = $self->_build_request('POST', '/user/task');
