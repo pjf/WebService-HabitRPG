@@ -285,6 +285,33 @@ Convenience method. Equivalent to C<$hrpg->updown($task, 'down')>;
 method up  ($task) { return $self->updown($task, 'up'  ); }
 method down($task) { return $self->updown($task, 'down'); }
 
+=method _update
+
+    $hrpg->_update($task, { attr => value });
+
+I<This method should be considered experimental.>
+
+Updates the given task on the server (using the underlying C<PUT>
+functionality in the API). Attributes are not checked for sanity,
+they're just directly converted into JSON.
+
+=cut
+
+method _update(
+    $task!,
+    $updates!
+) {
+    my $payload = $self->_encode_json({
+        %$updates,
+    });
+
+    my $req = $self->_build_request('PUT', "/user/task/$task");
+
+    $req->content( $payload );
+
+    return $self->_request( $req );
+}
+
 =method search_tasks
 
     my @tasks = $hrpg->search_tasks($search_term, all => $bool);

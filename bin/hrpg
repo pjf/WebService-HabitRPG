@@ -382,6 +382,19 @@ given ($cmd) {
 
         say Dumper $result;
     }
+    
+    # EXPERIMENTAL
+    when ('_update') {
+        my ($task, @args) = @ARGV;
+
+        my @candidates = $hrpg->search_tasks($task);
+
+        if (@candidates != 1) {
+            die "Found ".@candidates." matche(s). There can be only one.\n";
+        }
+
+        say Dumper $hrpg->_update($candidates[0]{id}, { @args } );
+    }
 
     default {
         say "\nSorry, I didn't understand what you were asking for!";

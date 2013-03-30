@@ -15,6 +15,10 @@ Revision history for WebService::HabitRPG
 
     * FEATURE: hrpg supports setting extended parameters on task creation.
 
+    * FEATURE: EXPERIMENTAL: _update in WS::HRPG and hrpg. This uses the
+               PUT API, and allows for setting arbitrary attributes via
+               the API.
+
 0.10      2013-03-27 15:54:27 Australia/Melbourne
 
     * BUGFIX:  'hrpg history' with no args gives a more useful error message.
