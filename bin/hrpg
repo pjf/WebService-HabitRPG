@@ -79,7 +79,8 @@ task name can be used. When using C<history> and C<show>, all
 tasks matching the name specified will be displayed.
 
 The C<--beta> switch may be provided as a first argument to use
-the beta API server.
+the beta API server.  The C<--dev> switch may be used to use
+C<http://localhost:3000/api/v1> as the server.
 
 =head1 EXPERIMENTAL FEATURES
 
@@ -167,24 +168,23 @@ unless ($config->{auth}{api_token}) {
     die "Cannot find user credentials in $config_file\n";
 }
 
-# Options handling.
-# We could use Getopt::Long, but it gets confused by + and -
-# being commands.
-
-my $beta = 0;
-
-if ($ARGV[0] eq "--beta") { 
-    $beta = 1;
-    shift @ARGV;
-}
-
 my @bonus_constructor_args;
 
 if ($ENV{HRPG_API_BASE}) {
     @bonus_constructor_args = ( api_base => $ENV{HRPG_API_BASE} );
 }
-elsif ($beta) {
+
+# Options handling.
+# We could use Getopt::Long, but it gets confused by + and -
+# being commands.
+
+if ($ARGV[0] eq "--beta") { 
+    shift @ARGV;
     @bonus_constructor_args = ( api_base => 'https://beta.habitrpg.com/api/v1' );
+}
+elsif ($ARGV[0] eq "--dev") {
+    shift @ARGV;
+    @bonus_constructor_args = ( api_base => 'http://localhost:3000/api/v1' );
 }
 
 my $hrpg = WebService::HabitRPG->new(

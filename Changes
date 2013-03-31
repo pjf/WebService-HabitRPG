@@ -8,6 +8,8 @@ Revision history for WebService::HabitRPG
     * FEATURE: Added --beta switch to 'hrpg', which uses the beta API
                server.
 
+    * FEATURE: Added --dev switch to 'hrpg', to use localhost:3000 .
+
     * FEATURE: Added 'hrpg show' to give detailed stats about a task.
 
     * FEATURE: WS::HRPG::new_task() supports the 'extend' parameter for
