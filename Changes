@@ -21,6 +21,10 @@ Revision history for WebService::HabitRPG
                PUT API, and allows for setting arbitrary attributes via
                the API.
 
+    * FEATURE: EXPERIMENTAL: [auth-beta] and [auth-dev] sections may be
+               added to the ~/.habitrpgrc file, and their details will
+               be used when using the --beta or --dev switches.
+
 0.10      2013-03-27 15:54:27 Australia/Melbourne
 
     * BUGFIX:  'hrpg history' with no args gives a more useful error message.

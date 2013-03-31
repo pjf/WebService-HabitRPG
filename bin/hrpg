@@ -69,6 +69,10 @@ the following lines:
 Replace the long strings of 'x's with the values you obtain by
 going to I<Settings -> API> in the HabitRPG web interface.
 
+You may also have an C<[auth-dev]> and/or C<[auth-beta]> section,
+if you use a development or beta server and have different credentials
+there.  Most users will never need this.
+
 =head1 DESCRIPTION
 
 This is a command-line client for the L<HabitRPG|http://habitrpg.com/>
@@ -181,10 +185,28 @@ if ($ENV{HRPG_API_BASE}) {
 if ($ARGV[0] eq "--beta") { 
     shift @ARGV;
     @bonus_constructor_args = ( api_base => 'https://beta.habitrpg.com/api/v1' );
+
+    # If we see auth details for beta, add those to our bonus options.
+
+    if ($config->{'auth-beta'}) {
+        push(@bonus_constructor_args,
+            api_token => $config->{'auth-beta'}{api_token},
+            user_id   => $config->{'auth-beta'}{user_id},
+        );
+    }
 }
 elsif ($ARGV[0] eq "--dev") {
     shift @ARGV;
     @bonus_constructor_args = ( api_base => 'http://localhost:3000/api/v1' );
+
+    # If we see auth details for beta, add those to our bonus options.
+
+    if ($config->{'auth-dev'}) {
+        push(@bonus_constructor_args,
+            api_token => $config->{'auth-dev'}{api_token},
+            user_id   => $config->{'auth-dev'}{user_id},
+        );
+    }
 }
 
 my $hrpg = WebService::HabitRPG->new(
