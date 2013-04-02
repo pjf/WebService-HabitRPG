@@ -5,12 +5,16 @@ Revision history for WebService::HabitRPG
     * DOCS:    hrpg help screen now mentions history command
                (Thanks @claudinec, GH #20)
 
+    * FEATURE: Added 'hrpg show' to give detailed stats about a task.
+
+    * FEATURE: Added 'hrpg clear daily' to force unchecking of all daily
+               tasks. This is useful if the web server fails to
+               uncheck them, or if you never use the web version. (GH #16)
+
     * FEATURE: Added --beta switch to 'hrpg', which uses the beta API
                server.
 
     * FEATURE: Added --dev switch to 'hrpg', to use localhost:3000 .
-
-    * FEATURE: Added 'hrpg show' to give detailed stats about a task.
 
     * FEATURE: WS::HRPG::new_task() supports the 'extend' parameter for
                setting extended attributes.

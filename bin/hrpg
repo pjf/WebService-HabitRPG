@@ -146,6 +146,7 @@ if (not @ARGV) {
     hrpg [+-] task [comment]     : Increment/decrement a task or habit
     hrpg history task            : Show the history of a task
     hrpg show task               : Show detailed info about a task
+    hrpg clear daily             : Uncheck all daily tasks
 
     Debugging commands:
     
@@ -403,6 +404,27 @@ given ($cmd) {
         );
 
         say Dumper $result;
+    }
+
+    when ('clear') {
+        my (@args) = @ARGV;
+
+        if ($args[0] ne 'daily') {
+            die "Only '$PROGNAME clear daily' is supported.\n";
+        }
+
+        my $dailies = $hrpg->tasks("daily");
+
+        foreach my $task (@$dailies) {
+            if ($task->{completed}) {
+                say "Clearing $task->{text}...";
+
+                # \0 converts into magic JSON false
+                $hrpg->_update($task->{id}, { completed => \0 });
+            }
+        }
+
+        say "All daily tasks cleared!\n";
     }
     
     # EXPERIMENTAL
