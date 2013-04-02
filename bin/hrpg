@@ -6,7 +6,9 @@ use WebService::HabitRPG;
 use Config::Tiny;
 use Data::Dumper;
 use File::Spec;
+use IO::Handle;
 use POSIX qw(strftime);
+use utf8::all;
 
 # Idonethis detection code.
 my $IDT_VERSION = 0;
@@ -425,6 +427,38 @@ given ($cmd) {
         }
 
         say "All daily tasks cleared!\n";
+    }
+
+    when ('↑↑↓↓←→←→BA') {
+        print "\nAuto-leveller enabled. Please wait.";
+        STDOUT->flush;
+
+        my $start_level = $hrpg->user->{stats}{lvl}
+            or die "Cannot determine player level";
+
+        my $leveller = $hrpg->new_task(
+            type => 'habit',
+            text => '',
+            up   => 1,
+        );
+
+        my $id = $leveller->{id};
+
+        while ($hrpg->user->{stats}{lvl} <= $start_level) {
+            print ".";
+            STDOUT->flush;
+            $hrpg->up($id);
+            print ".";
+            STDOUT->flush;
+            $hrpg->_update($id, { value => 0 });
+            print ".";
+            STDOUT->flush;
+        }
+
+        print "DING!\n";
+
+        # Oh dear, I guess we need a way to delete that task now.
+
     }
     
     # EXPERIMENTAL

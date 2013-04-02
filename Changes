@@ -2,6 +2,9 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * FEATURE:  Added hrpg support for unicode task names and input.
+                (Now requires utf8::all)
+
     * BUGFIX:   Fixed bug where new_task() could fail when not
                 supplied with an extend parameter.
 
