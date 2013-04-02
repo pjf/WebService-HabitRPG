@@ -2,6 +2,9 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * BUGFIX:   Fixed bug where new_task() could fail when not
+                supplied with an extend parameter.
+
 0.11      2013-04-02 22:38:08 Australia/Melbourne
 
     * DOCS:    hrpg help screen now mentions history command

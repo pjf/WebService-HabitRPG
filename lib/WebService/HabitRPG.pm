@@ -207,7 +207,7 @@ method new_task(
     :$note = '',
     :$up = 1,
     :$down = 1,
-    :$extend,
+    :$extend = {},
 ) {
 
     # Magical boolification for JSONification.
