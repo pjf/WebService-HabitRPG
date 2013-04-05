@@ -2,6 +2,8 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+0.13      2013-04-05 17:38:56 Australia/Melbourne
+
     * FEATURE:  Allow +n and -n to update a habit multiple times.
                 Eg `hrpg +2 pomodoro`. Thanks @claudinec (GH #24)
 
