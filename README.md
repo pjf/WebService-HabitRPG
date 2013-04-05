@@ -20,6 +20,16 @@ You can find documention of the stable release on the CPAN:
 * https://metacpan.org/module/WebService::HabitRPG
 * https://metacpan.org/module/hrpg
 
+## Using a Mac?
+
+If you've got a weird error that Data::Alias fails to install
+on your Mac or other dtrace-friendly system, there's a patched version you can
+install with:
+
+    cpanm https://dl.dropbox.com/u/9702672/cpan/Data-Alias-1.16-dtrace-patched.tar.gz
+
+Which contains the patches in [RT #75156](https://rt.cpan.org/Public/Bug/Display.html?id=75156).  Upgrading to Perl 5.14 or above should also work. 
+
 ## To develop / contribute
 
 * Fork this repository
