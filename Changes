@@ -2,6 +2,9 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * FEATURE:  Allow +n and -n to update a habit multiple times.
+                Eg `hrpg +2 pomodoro`. Thanks @claudinec (GH #24)
+
 0.12      2013-04-03 00:46:02 Australia/Melbourne
 
     * FEATURE:  Added hrpg support for unicode task names and input.

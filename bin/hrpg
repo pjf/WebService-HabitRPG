@@ -32,7 +32,7 @@ Usage:
     hrpg tasks                   : Show current tasks
     hrpg habit|daily|reward|todo : Show tasks of current type
     hrpg new                     : Create new task 'hrpg new' for help.
-    hrpg [+-] task               : Increment/decrement a task or habit
+    hrpg [+-][num] task          : Increment/decrement a task or habit
     hrpg history task            : Show the history of a task
     hrpg show task               : Show detailed info about a task
 
@@ -141,19 +141,19 @@ if (not @ARGV) {
     say q{
     Usage:
 
-    hrpg status                  : Show current HP/XP/GP
-    hrpg tasks                   : Show current tasks
-    hrpg habit|daily|reward|todo : Show tasks of current type
-    hrpg new                     : Create new task 'hrpg new' for help.
-    hrpg [+-] task [comment]     : Increment/decrement a task or habit
-    hrpg history task            : Show the history of a task
-    hrpg show task               : Show detailed info about a task
-    hrpg clear daily             : Uncheck all daily tasks
+    hrpg status                   : Show current HP/XP/GP
+    hrpg tasks                    : Show current tasks
+    hrpg habit|daily|reward|todo  : Show tasks of current type
+    hrpg new                      : Create new task 'hrpg new' for help.
+    hrpg [+-][num] task [comment] : Increment/decrement a task or habit
+    hrpg history task             : Show the history of a task
+    hrpg show task                : Show detailed info about a task
+    hrpg clear daily              : Uncheck all daily tasks
 
     Debugging commands:
     
-    hrpg dump                    : Dump entire user info
-    hrpg dump tasks              : Dump task info
+    hrpg dump                     : Dump entire user info
+    hrpg dump tasks               : Dump task info
 
     For more documentation, use `perldoc hrpg`.
     };
@@ -333,24 +333,31 @@ given ($cmd) {
         }
     }
 
-    when (/^[+-]$/) {
+    when (/^(?<dir>[+-])(?<qty>\d*)$/) {
         my ($task_name, @comment) = @ARGV;
-        die "Usage: $PROGNAME $_ task [comment]\n" if not $task_name;
 
-        my $direction = $_ eq '+' ? 'up' : 'down';
+        my $direction = $+{dir} eq '+' ? 'up' : 'down';
+        my $qty       = $+{qty} || 1;
+
+        die "Usage: $PROGNAME $direction\[num] task [comment]\n"
+            if not $task_name;
 
         my @candidates = $hrpg->search_tasks($task_name);
 
         if (@candidates == 1) {
             my $task = $candidates[0];
-            say "Updating $task->{text} ($task->{id})\n";
+            say "Updating $task->{text} (x$qty) ($task->{id})\n";
 
             # TODO: We really need an object model behind
             # this, so we're not digging out hash keys.
 
             my $stats = $hrpg->user->{stats};
+            
+            my $result;
 
-            my $result = $hrpg->updown($task->{id}, $direction);
+            foreach (1..$qty) {
+                $result = $hrpg->updown($task->{id}, $direction);
+            }
 
             # Display new stats.
 
