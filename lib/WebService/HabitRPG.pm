@@ -92,6 +92,7 @@ sub BUILD {
         $self->agent(
             WWW::Mechanize->new(
                 agent => "Perl/$], WebService::HabitRPG/" . $self->VERSION,
+                keep_alive => 1,
             )
         );
     }
