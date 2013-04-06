@@ -2,6 +2,9 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * OPTIMISE: Connections to the habitrpg server are now kept-alive
+                for faster network ops.
+
 0.13      2013-04-05 17:38:56 Australia/Melbourne
 
     * FEATURE:  Allow +n and -n to update a habit multiple times.
