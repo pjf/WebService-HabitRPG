@@ -232,8 +232,6 @@ my $hrpg = WebService::HabitRPG->new(
     @bonus_constructor_args,
 );
 
-say Dumper $hrpg->agent->conn_cache;
-
 my $cmd = shift @ARGV;
 
 given ($cmd) {
