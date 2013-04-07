@@ -73,12 +73,16 @@ eval {
 
 ok($@,"Invalid type throws exception");
 
-eval {
-    my $badtask = WebService::HabitRPG::Task->new(
-        { %$task_template, text => undef }
-    );
-};
+foreach my $attr ('text','id') {
+    foreach my $invalid (undef, '') {
+        eval {
+            my $badtask = WebService::HabitRPG::Task->new(
+                { %$task_template, $attr => $invalid }
+            );
+        };
 
-ok($@,"Invalid text throws exception");
+        ok($@,"Invalid $attr throws exception");
+    }
+}
 
 done_testing;
