@@ -8,6 +8,7 @@ use WWW::Mechanize;
 use Method::Signatures 20121201;
 use WebService::HabitRPG::Task;
 use JSON::Any;
+use Data::Dumper;
 
 our $DEBUG = $ENV{HRPG_DEBUG} || 0;
 
@@ -415,7 +416,13 @@ method _decode_json($string) {
     warn "Decoding JSON: $string" if $DEBUG;
 
     $self->_last_json($string);         # For debugging
-    return $json->decode( $string );
+    my $result = $json->decode( $string );
+
+    if ($DEBUG) {
+        warn "JSON decoded to: ", Dumper($result), "\n";
+    }
+
+    return $result;
 }
 
 method _encode_json($string) {
