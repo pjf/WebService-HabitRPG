@@ -274,8 +274,8 @@ given ($cmd) {
         my $tasks = $hrpg->tasks($+{type});
 
         foreach my $task (@$tasks) {
-            next if $task->{type} eq 'todo' and $task->{completed};
-            say format_task($task);
+            next if $task->type eq 'todo' and $task->completed;
+            say $task->format_task;
         }
     }
 
@@ -285,14 +285,14 @@ given ($cmd) {
         my $last_type = "";
 
         foreach my $task (@$tasks) {
-            next if $task->{type} eq 'reward';
-            next if $task->{type} eq 'todo' and $task->{completed};
+            next if $task->type eq 'reward';
+            next if $task->type eq 'todo' and $task->completed;
 
             if ($task->{type} ne $last_type) {
                 say "\n === \u$task->{type} ===\n";
             }
-            say format_task($task);
-            $last_type = $task->{type};
+            say $task->format_task;
+            $last_type = $task->type;
         }
     }
 
@@ -313,7 +313,7 @@ given ($cmd) {
         }
 
         foreach my $task (@tasks) {
-            say Dumper $task;
+            say Dumper $task->_raw;
         }
     }
         
@@ -334,7 +334,7 @@ given ($cmd) {
         foreach my $task (@tasks) {
             say "\n = ", $task->{text}, " =\n";
 
-            foreach my $hist ( @{ $task->{history} }) {
+            foreach my $hist ( @{ $task->_raw->{history} }) {
 
                 # Substr is to work around lefnire/habitrpg#716
                 # This will break in a few thousand years time.
@@ -359,7 +359,7 @@ given ($cmd) {
 
         if (@candidates == 1) {
             my $task = $candidates[0];
-            say "Updating $task->{text} (x$qty) ($task->{id})\n";
+            say "Updating $task->{text} (x$qty) (",$task->id,")\n";
 
             # TODO: We really need an object model behind
             # this, so we're not digging out hash keys.
@@ -369,7 +369,7 @@ given ($cmd) {
             my $result;
 
             foreach (1..$qty) {
-                $result = $hrpg->updown($task->{id}, $direction);
+                $result = $hrpg->updown($task->id, $direction);
             }
 
             # Display new stats.
@@ -394,7 +394,7 @@ given ($cmd) {
             say "Did you mean...";
 
             foreach my $task (@candidates) {
-                say "* $task->{text} ($task->{id})";
+                say "* $task->{text} ($task->id)";
             }
         }
     }
@@ -442,7 +442,7 @@ given ($cmd) {
                 say "Clearing $task->{text}...";
 
                 # \0 converts into magic JSON false
-                $hrpg->_update($task->{id}, { completed => \0 });
+                $hrpg->_update($task->id, { completed => \0 });
             }
         }
 
@@ -499,48 +499,4 @@ given ($cmd) {
         say "Try $PROGNAME with no arguments for help.\n";
         exit 1;
     }
-}
-
-# TODO: Move these to the API module? Maybe?
-
-# Formats todo/daily tasks with checkmarks. Everything else gets bullets.
-
-sub format_task {
-    my ($task) = @_;
-
-    my $formatted = "";
-
-    my $today_short = (HRPG_REPEAT_MAP)[ int(strftime "%w", localtime) ];
-    my $active_today = 1;
-
-    if ($task->{type} =~ /^(?:daily|todo)$/) {
-        if ($task->{completed}) {
-            $formatted .= '[X] ';
-        }
-        else {
-            my $stop = 0;
-            if ($task->{type} eq 'daily') {
-              $active_today = $task->{repeat}->{$today_short};
-              if (not $active_today and $task->{type} eq 'daily') {
-                $formatted .= '[-] ';
-                $stop = 1;
-              }
-            }
-            if (not $stop) {
-              $formatted .= '[ ] ';
-            }
-        }
-    }
-    elsif ($task->{type} eq 'habit') {
-        $formatted .= ' ';
-        $formatted .= $task->{up}   ? "+"  : " "  ;
-        $formatted .= $task->{down} ? "- " : "  " ;
-    }
-    else {
-        $formatted .= "  * ";
-    }
-
-    $formatted .= $task->{text};
-
-    return $formatted;
 }

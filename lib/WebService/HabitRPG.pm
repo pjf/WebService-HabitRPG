@@ -6,6 +6,7 @@ use autodie;
 use Moo;
 use WWW::Mechanize;
 use Method::Signatures 20121201;
+use WebService::HabitRPG::Task;
 use JSON::Any;
 
 # ABSTRACT: Perl interface to the HabitRPG API
@@ -148,9 +149,9 @@ data structures returned by this method.
 
 method tasks($type where qr{^(?: habit | daily | todo | reward | )$}x = "") {
     if ($type) {
-        return $self->_get_request( "/user/tasks?type=$type" ); 
+        return $self->_get_tasks( "/user/tasks?type=$type" ); 
     }
-    return $self->_get_request( "/user/tasks" ); 
+    return $self->_get_tasks( "/user/tasks" ); 
 }
 
 =method get_task
@@ -163,7 +164,7 @@ at L</tasks> above.
 =cut
 
 method get_task($task_id) {
-    return $self->_get_request("/user/task/$task_id");
+    return $self->_get_tasks("/user/task/$task_id");
 }
 
 =method new_task
@@ -340,7 +341,7 @@ tasks.  For example:
     
     # Increment task if found
     if (@tasks == 1) {
-        $hrpg->up($tasks[0]{id});
+        $hrpg->up($tasks[0]->id);
     }
     else {
         say "Too few or too many tasks found.";
@@ -358,17 +359,17 @@ method search_tasks($search_term, :$all = 0) {
 
     foreach my $task (@$tasks) {
 
-        next if $task->{type} eq 'reward';
-        if ($task->{completed} and not $all) { next; }
+        next if $task->type eq 'reward';
+        if ($task->completed and not $all) { next; }
 
         # If our search term exactly matches a task ID, then use
         # that.
 
-        if ($task->{id} eq $search_term) {
+        if ($task->id eq $search_term) {
             return $task;
         }
 
-        if ($task->{text} =~ /\Q$search_term\E/i) {
+        if ($task->text =~ /\Q$search_term\E/i) {
             push(@matches, $task);
         }
     }
@@ -376,6 +377,20 @@ method search_tasks($search_term, :$all = 0) {
 }
 
 #### Internal use only code beyond this point ####
+
+method _get_tasks($url) {
+    my $results = $self->_get_request($url);
+
+    my @tasks;
+
+    foreach my $raw (@$results) {
+        push @tasks, WebService::HabitRPG::Task->new(
+            $raw,
+        );
+    }
+
+    return \@tasks;
+}
 
 method _get_request($url) {
     my $req = $self->_build_request('GET', $url);
