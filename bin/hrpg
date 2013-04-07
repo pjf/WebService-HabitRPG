@@ -13,6 +13,10 @@ use utf8::all;
 # Idonethis detection code.
 my $IDT_VERSION = 0;
 
+use constant HRPG_REPEAT_MAP => qw(
+    su m t w th f s
+);
+
 eval {
     require WebService::Idonethis; 
     $IDT_VERSION = WebService::Idonethis->VERSION;
@@ -497,12 +501,25 @@ sub format_task {
 
     my $formatted = "";
 
+    my $today_short = (HRPG_REPEAT_MAP)[ int(strftime "%w", localtime) ];
+    my $active_today = 1;
+
     if ($task->{type} =~ /^(?:daily|todo)$/) {
         if ($task->{completed}) {
             $formatted .= '[X] ';
         }
         else {
-            $formatted .= '[ ] ';
+            my $stop = 0;
+            if ($task->{type} eq 'daily') {
+              $active_today = $task->{repeat}->{$today_short};
+              if (not $active_today and $task->{type} eq 'daily') {
+                $formatted .= '[-] ';
+                $stop = 1;
+              }
+            }
+            if (not $stop) {
+              $formatted .= '[ ] ';
+            }
         }
     }
     elsif ($task->{type} eq 'habit') {
