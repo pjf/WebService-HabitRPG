@@ -45,7 +45,9 @@ has 'up'        => ( is => 'ro', default  => sub { 0 }, isa => $Bool);
 has 'down'      => ( is => 'ro', default  => sub { 0 }, isa => $Bool);
 has 'value'     => ( is => 'ro', required => 1, isa => $Num);
 has 'type'      => ( is => 'ro', required => 1, isa => $Type);
-has 'completed' => ( is => 'ro', isa => $Bool );
+has 'history'   => ( is => 'ro' );  # TODO: Objectify
+has 'repeat'    => ( is => 'ro' );  # TODO: Objectify
+has 'completed' => ( is => 'ro' );
 has '_raw'      => ( is => 'rw' );
 
 sub BUILD {
@@ -57,30 +59,33 @@ sub BUILD {
     $self->_raw($args);
 }
 
+sub active_today {
+    my ($self) = @_;
+
+    # Non-daily tasks are always active
+    
+    if ($self->type ne 'daily') {
+        return 1;
+    }
+
+    my $today_short = (HRPG_REPEAT_MAP)[ int(strftime "%w", localtime) ];
+    return $self->repeat->{$today_short};
+}
+
 sub format_task {
     my ($task) = @_;
 
     my $formatted = "";
 
-    my $today_short = (HRPG_REPEAT_MAP)[ int(strftime "%w", localtime) ];
-    my $active_today = 1;
-
     if ($task->type =~ /^(?:daily|todo)$/) {
         if ($task->completed) {
             $formatted .= '[X] ';
         }
+        elsif (not $task->active_today) {
+            $formatted .= '[-] ';
+        }
         else {
-            my $stop = 0;
-            if ($task->type eq 'daily') {
-              $active_today = $task->_raw->{repeat}->{$today_short};
-              if (not $active_today and $task->type eq 'daily') {
-                $formatted .= '[-] ';
-                $stop = 1;
-              }
-            }
-            if (not $stop) {
-              $formatted .= '[ ] ';
-            }
+            $formatted .= '[ ] ';
         }
     }
     elsif ($task->type eq 'habit') {
