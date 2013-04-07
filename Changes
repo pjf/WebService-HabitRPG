@@ -11,6 +11,14 @@ Revision history for WebService::HabitRPG
 
     * TEST:     More tests for tasks.
 
+    * FEATURE:  Passing a 'keep_alive' parameter to
+                WS::HRPG->new will allow the LWP::UserAgent
+                keep-alive behaviour to be specified.
+
+    * CONFIG:   You can now set keep_alive = 0 in the
+                [connection] section of ~/.habitrpgrc to
+                disable keep-alives.  GH #25
+
 0.14      2013-04-06 16:58:45 Australia/Melbourne
 
     * OPTIMISE: Connections to the habitrpg server are now kept-alive

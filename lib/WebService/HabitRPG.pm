@@ -86,6 +86,8 @@ has '_last_json' => (is => 'rw'); # For debugging
 
 sub BUILD {
     my ($self, $args) = @_;
+    
+    my $keep_alive = $args->{keep_alive} // 1;
 
     # Set a default agent if we don't already have one.
 
@@ -93,7 +95,7 @@ sub BUILD {
         $self->agent(
             WWW::Mechanize->new(
                 agent => "Perl/$], WebService::HabitRPG/" . $self->VERSION,
-                keep_alive => 1,
+                keep_alive => $keep_alive,
             )
         );
     }

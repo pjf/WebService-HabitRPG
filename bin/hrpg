@@ -80,6 +80,13 @@ You may also have an C<[auth-dev]> and/or C<[auth-beta]> section,
 if you use a development or beta server and have different credentials
 there.  Most users will never need this.
 
+On some systems, the default-behaviour of using keep-alives (which
+normally improve performance) causes troubles.  You can disable
+keep-alives by adding the following to your F<.habitrpgrc>:
+
+    [connection]
+    keep_alive = 0
+
 =head1 DESCRIPTION
 
 This is a command-line client for the L<HabitRPG|http://habitrpg.com/>
@@ -219,10 +226,13 @@ elsif ($ARGV[0] eq "--dev") {
 }
 
 my $hrpg = WebService::HabitRPG->new(
-    api_token => $config->{auth}{api_token},
-    user_id   => $config->{auth}{user_id},
+    api_token  => $config->{auth}{api_token},
+    user_id    => $config->{auth}{user_id},
+    keep_alive => $config->{connection}{keep_alive} // 1,
     @bonus_constructor_args,
 );
+
+say Dumper $hrpg->agent->conn_cache;
 
 my $cmd = shift @ARGV;
 
