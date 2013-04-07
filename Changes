@@ -15,6 +15,8 @@ Revision history for WebService::HabitRPG
                 [connection] section of ~/.habitrpgrc to
                 disable keep-alives.  GH #25
 
+    * DEBUG:    Set environment HRPG_DEBUG=1 for debugging.
+
 0.14      2013-04-06 16:58:45 Australia/Melbourne
 
     * OPTIMISE: Connections to the habitrpg server are now kept-alive
