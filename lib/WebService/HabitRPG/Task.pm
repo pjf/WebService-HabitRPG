@@ -7,6 +7,7 @@ use Moo;
 use Scalar::Util qw(looks_like_number);
 use POSIX qw(strftime);
 use Carp qw(croak);
+use Data::Dumper;
 
 use constant HRPG_REPEAT_MAP => qw(
     su m t w th f s
@@ -52,6 +53,11 @@ has '_raw'      => ( is => 'rw' );
 
 sub BUILD {
     my ($self, $args) = @_;
+
+    if ($WebService::HabitRPG::DEBUG) {
+        warn "Building task with:\n";
+        warn Dumper($args), "\n";
+    }
 
     # Since we're usually being called directly with the results of
     # a JSON parse, we want to record that original structure here.
