@@ -35,13 +35,17 @@ my $Type = sub {
         unless $_[0] =~ /^(?:habit|todo|daily|reward)$/;
 };
 
-has 'text'      => ( is => 'ro', required => 1);
-has 'id'        => ( is => 'ro', required => 1);
+my $NonEmpty = sub {
+    croak "Empty or undef parameter" unless length($_[0] // "");
+};
+
+has 'text'      => ( is => 'ro', required => 1, isa => $NonEmpty);
+has 'id'        => ( is => 'ro', required => 1, isa => $NonEmpty);
 has 'up'        => ( is => 'ro', default  => sub { 0 }, isa => $Bool);
 has 'down'      => ( is => 'ro', default  => sub { 0 }, isa => $Bool);
 has 'value'     => ( is => 'ro', required => 1, isa => $Num);
 has 'type'      => ( is => 'ro', required => 1, isa => $Type);
-has 'completed' => ( is => 'ro' );
+has 'completed' => ( is => 'ro', isa => $Bool );
 has '_raw'      => ( is => 'rw' );
 
 sub BUILD {
