@@ -4,13 +4,17 @@ use strict;
 use warnings;
 use autodie;
 use Moo;
-use Carp qw(croak);
 use Scalar::Util qw(looks_like_number);
 use POSIX qw(strftime);
+use Carp qw(croak);
 
 use constant HRPG_REPEAT_MAP => qw(
     su m t w th f s
 );
+
+# TODO: croak provides poor error messages in here, possibly due to
+# it not knowing about Moo properly. Still, they're good enough for
+# getting stack backtraces when needed.
 
 # ABSTRACT: A HabitRPG task
 
@@ -43,7 +47,8 @@ has '_raw'      => ( is => 'rw' );
 sub BUILD {
     my ($self, $args) = @_;
 
-    warn "Making $args->{id}\n";
+    # Since we're usually being called directly with the results of
+    # a JSON parse, we want to record that original structure here.
 
     $self->_raw($args);
 }

@@ -7,6 +7,10 @@ Revision history for WebService::HabitRPG
 
     * FEATURE:  Added a simple 'hrpg version' command.
 
+    * INTERNAL: Tasks are now fully fledged objects.
+
+    * TEST:     More tests for tasks.
+
 0.14      2013-04-06 16:58:45 Australia/Melbourne
 
     * OPTIMISE: Connections to the habitrpg server are now kept-alive
