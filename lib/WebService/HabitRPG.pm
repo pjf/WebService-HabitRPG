@@ -126,20 +126,8 @@ tasks (habits, dailies, todos and rewards) are returned. With
 an argument, only tasks of the given type are returned. The
 argument must be one of C<habit>, C<daily>, C<todo> or C<reward>.
 
-The data returned for each task is defined by the HabitRPG API, but
-at the time of writing is:
-
-    {
-        text    => 'floss', # Text shown in web interface. Task name.
-        type    => 'habit', # One of: habit, todo, daily, reward
-        id      => '...',   # Internal task ID. Extensively used by API.
-        value   => 0,       # Either cost in GP, or how well one is doing
-        notes   => '',      # Extended, human-readable note field
-        repeat  => {...},   # Daily tasks only. 
-        up      => 1,       # Can this task be incremented?
-        down    => 0,       # Can this task be decremented?
-        history => [...],   # History data for this task.
-    }
+See L<WebService::HabitRPG::Task> for a complete description of
+what task objects look like.
 
 Not all tasks will have all fields.  Using the L<hrpg> command-line
 tool with C<hrpg dump tasks> is a convenient way to see the
