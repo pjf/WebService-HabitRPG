@@ -21,6 +21,9 @@ Revision history for WebService::HabitRPG
 
     * DEBUG:    Set environment HRPG_DEBUG=1 for debugging.
 
+    * BUGFIX:   Detect and skip undef/null values returned by
+                the /task endpoint.  GH #27
+
 0.14      2013-04-06 16:58:45 Australia/Melbourne
 
     * OPTIMISE: Connections to the habitrpg server are now kept-alive
