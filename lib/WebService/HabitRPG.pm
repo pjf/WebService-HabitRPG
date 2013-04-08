@@ -376,7 +376,10 @@ method _get_tasks($url) {
 
     my @tasks;
 
-    foreach my $raw (@$results) {
+    # Somehow we can get back completely undefined results,
+    # hence the grep to only look at defined ones.
+
+    foreach my $raw (grep { defined } @$results) {
         push @tasks, WebService::HabitRPG::Task->new(
             $raw,
         );
