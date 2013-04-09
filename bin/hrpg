@@ -402,7 +402,7 @@ given ($cmd) {
             say "Did you mean...";
 
             foreach my $task (@candidates) {
-                say "* $task->{text} ($task->id)";
+                say "* $task->{text} (",$task->id,")";
             }
         }
     }

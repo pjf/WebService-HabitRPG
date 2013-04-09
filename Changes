@@ -2,6 +2,9 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * BUGFIX:   Task ids are now once properly shown when a command
+                is unsure which task you're referring to.
+
 0.15      2013-04-09 04:53:30 Australia/Melbourne
 
     * BUILD:    No longer falsely require WS::Idonethis.
