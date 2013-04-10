@@ -39,6 +39,7 @@ Usage:
     hrpg [+-][num] task          : Increment/decrement a task or habit
     hrpg history task            : Show the history of a task
     hrpg show task               : Show detailed info about a task
+    hrpg clear daily             : Uncheck all daily tasks
 
     Debugging commands:
     
@@ -448,10 +449,14 @@ given ($cmd) {
 
         foreach my $task (@$dailies) {
             if ($task->{completed}) {
-                say "Clearing $task->{text}...";
+                say "Clearing ",$task->text,"...";
 
                 # \0 converts into magic JSON false
                 $hrpg->_update($task->id, { completed => \0 });
+            }
+            else {
+                say "Ouch. Taking damage for ",$task->text,"...";
+                say Dumper $hrpg->down($task->id);
             }
         }
 
