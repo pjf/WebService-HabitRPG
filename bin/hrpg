@@ -430,6 +430,7 @@ given ($cmd) {
             note => $note,
             up   => $up,
             down => $down,
+            value => $value,
             extend => { @rest },
         );
 

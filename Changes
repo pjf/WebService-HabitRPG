@@ -6,6 +6,9 @@ Revision history for WebService::HabitRPG
                 LWP::UserAgent can't/won't find the system
                 ones.
 
+    * BUGFIX:   The value parameter when creating new tasks
+                is no longer ignored. GH #31, thanks @toddgrotenhuis
+
 0.16      2013-04-09 15:18:22 Australia/Melbourne
 
     * BUGFIX:   Task ids are now once properly shown when a command
