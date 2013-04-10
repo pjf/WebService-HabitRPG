@@ -63,7 +63,7 @@ You might want to put that last line in your F<~/.bashrc> file.
 
 You can then install C<hrpg> and related utilities with:
 
-    cpanm hrpg
+    cpanm WebService::HabitRPG
 
 =head2 Configuration
 

@@ -11,6 +11,8 @@ Revision history for WebService::HabitRPG
     * BUGFIX:   The value parameter when creating new tasks
                 is no longer ignored. GH #31, thanks @toddgrotenhuis
 
+    * DOCS:     Fix install instructions in hrpg. Closes GH #29
+
 0.16      2013-04-09 15:18:22 Australia/Melbourne
 
     * BUGFIX:   Task ids are now once properly shown when a command
