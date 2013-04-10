@@ -39,6 +39,7 @@ Usage:
     hrpg [+-][num] task          : Increment/decrement a task or habit
     hrpg history task            : Show the history of a task
     hrpg show task               : Show detailed info about a task
+    hrpg clear daily              : Uncheck all daily tasks
 
     Debugging commands:
     
