@@ -8,14 +8,11 @@ use Data::Dumper;
 use File::Spec;
 use IO::Handle;
 use POSIX qw(strftime);
+use Try::Tiny;
 use utf8::all;
 
 # Idonethis detection code.
 my $IDT_VERSION = 0;
-
-use constant HRPG_REPEAT_MAP => qw(
-    su m t w th f s
-);
 
 eval {
     require WebService::Idonethis; 
@@ -378,10 +375,35 @@ given ($cmd) {
             my $result;
 
             foreach (1..$qty) {
-                $result = $hrpg->updown($task->id, $direction);
+
+                # Kludge to catch upstream errors from dropping items.
+                # pjf/WebService-HabitRPG#32 lefire/habitrpg#815
+
+                # TODO: Remove once lefnire/habitrpg#815 is resolved.
+
+                try {
+                    $result = $hrpg->updown($task->id, $direction);
+                }
+                catch {
+                    when (/^malformed JSON string/) {
+                        say "Looks like an item dropped! "
+                           ."Check http://habitrpg.com/ to see what it is.";
+                        $result = undef;
+                    }
+                    default { die $_; }
+                };
             }
 
-            # Display new stats.
+            # If our last call resulted in a drop-error, then we have
+            # to go get our user data to see what actually happened.
+
+            if (not defined $result) {
+                # Grab our current user stats.
+                $result = $hrpg->user->{stats};
+            }
+
+            # Display stats delta.
+            # TODO: Detect level ups and handle appropriately.
 
             printf "HP: %d/%d (%+.2f)\n", $result->{hp}, $stats->{maxHealth},  $result->{hp}  - $stats->{hp}; 
             printf "XP: %d/%d (%+.2f)\n", $result->{exp},$stats->{toNextLevel},$result->{exp} - $stats->{exp};
