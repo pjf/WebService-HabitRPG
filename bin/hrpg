@@ -147,7 +147,7 @@ L<WebService::HabitRPG>
 
 =cut
 
-if (not @ARGV) {
+if (not @ARGV or $ARGV[0] eq 'help') {
     say q{
     Usage:
 

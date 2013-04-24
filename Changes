@@ -7,6 +7,8 @@ Revision history for WebService::HabitRPG
 
     * BUILD:    New dependency: Try::Tiny.
 
+    * FEATURE:  `hrpg help` now provides a help screen.
+
 0.17      2013-04-10 22:08:08 Australia/Melbourne
 
     * BUILD:    Make sure Mozilla::CA certs are installed in case
