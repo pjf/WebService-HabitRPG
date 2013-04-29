@@ -385,12 +385,12 @@ given ($cmd) {
                     $result = $hrpg->updown($task->id, $direction);
                 }
                 catch {
-                    when (/^malformed JSON string/) {
-                        say "Looks like an item dropped! "
-                           ."Check http://habitrpg.com/ to see what it is.";
-                        $result = undef;
-                    }
-                    default { die $_; }
+                    # TODO: Figure out if we actually got a dropped item,
+                    # or if upstream is just dead or broken.
+
+                    say "Looks like an item dropped! "
+                        ."Check http://habitrpg.com/ to see what it is.";
+                    $result = undef;
                 };
             }
 
