@@ -2,6 +2,8 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+0.18      2013-04-29 14:52:14 Australia/Melbourne
+
     * BUGFIX:   Detect drops from upstream and direct user to web
                 interface. Kludges GH #32 and lefnire/habitrpg#815 .
 
