@@ -103,6 +103,37 @@ C<http://localhost:3000/api/v1> as the server.
 These features are considered experimental, and may change in
 the future.
 
+=head2 TAGS
+
+As there is no API for tags yet, you need to include them in your
+configuration file if you wish to be able to use them. The syntax is:
+
+    [tags]
+    study = 96681445-0e8a-43f7-85ac-9b7f1cb130ee
+    home  = 1b832ec1-a87c-4c11-9b54-e1c24c27313f
+    qs    = 63bc4f62-aaa4-4207-887b-95254bcbcfff
+
+To find out the uuid of a tag, use `hrpg show` on a task having
+that tag, and examine the resulting data structure. Once the upstream
+tag API is finished, this process will be obsolete.
+
+Tags can be used in any search by prefixing them with the 
+I<tag prefix character>, which defaults to caret (^).  For
+example:
+
+    hrpg daily ^work      # Show daily tasks tagged with 'work'
+    hrpg tasks ^code      # Show all tasks tagged with 'code'
+
+If you don't like the tag prefix character, you can change it
+in your configuration file. Simply add:
+
+    [config]
+    tag_prefix = @
+
+This might be handy if you tend to use location tags. You could write:
+C<hrpg daily @home> and C<hrpg daily @work> to show daily tasks
+with the I<home> and I<work> tags respectively.
+
 =head2 INTEGRATION WITH IDONETHIS
 
 If you have L<WebService::Idonethis> installed, then you can add
@@ -228,6 +259,14 @@ elsif ($ARGV[0] eq "--dev") {
 if ($config->{tags}) {
     push @bonus_constructor_args, tags => $config->{tags};
 };
+
+# Figure out our tag prefix character.
+
+if ($config->{config}{tag_prefix}) {
+    push @bonus_constructor_args, tag_prefix => $config->{config}{tag_prefix};
+}
+
+# Build our HRPG object
 
 my $hrpg = WebService::HabitRPG->new(
     api_token  => $config->{auth}{api_token},

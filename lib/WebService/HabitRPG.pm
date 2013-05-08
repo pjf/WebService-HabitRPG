@@ -66,9 +66,10 @@ HabitRPG API.
 =method new
 
     my $hrpg = WebService::HabitRPG->new(
-        api_token => 'your-token-goes-here',
-        user_id   => 'your-user-id-goes-here',
-        tags      => { work => $work_uuid, home => $home_uuid, ... },
+        api_token  => 'your-token-goes-here',
+        user_id    => 'your-user-id-goes-here',
+        tags       => { work => $work_uuid, home => $home_uuid, ... },
+        tag_prefix => '^', # Optional, defaults to '^'
     );
 
 Creates a new C<WebService::HabitRPG> object. The C<api_token> and C<user_id>
@@ -94,6 +95,7 @@ has 'agent'      => (is => 'rw');
 has 'api_base'   => (is => 'ro', default => sub { 'https://habitrpg.com/api/v1' });
 has '_last_json' => (is => 'rw'); # For debugging
 has 'tags'       => (is => 'rw');
+has 'tag_prefix' => (is => 'rw', default => sub { '^' });
 
 # use constant URL_BASE => 'https://habitrpg.com/api/v1';
 
@@ -367,9 +369,11 @@ method search_tasks($search_term, :$all = 0) {
     my @matches;
     my $tag_uuid;
 
+    my $tag_prefix = $self->tag_prefix;
+
     # Check to see if we're doing a tag search.
 
-    if ($search_term =~ /^\Q$TAG_PREFIX_CHARACTER\E(?<tag>.*)/ms) {
+    if ($search_term =~ /^\Q$tag_prefix\E(?<tag>.*)/ms) {
         if (not $self->tags) { croak "No tags defined on " . ref($self) . " object!"; }
         $tag_uuid = $self->tags->{ $+{tag} };
         $tag_uuid or croak "Search for unknown tag: $+{tag}";

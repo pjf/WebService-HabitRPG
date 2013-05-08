@@ -10,6 +10,11 @@ Revision history for WebService::HabitRPG
                 starting with a '^' will match all tasks with that
                 tag.  (Eg: `hrpg daily ^home`)
 
+    * FEATURE:  Experimental tag prefix support. Add a [config]
+                section to your ~/.habitrpg file and a
+                `tag_prefix = whatever` section if you don't like the
+                default tag character of '^'.
+
 0.18      2013-04-29 14:52:14 Australia/Melbourne
 
     * BUGFIX:   Detect drops from upstream and direct user to web
