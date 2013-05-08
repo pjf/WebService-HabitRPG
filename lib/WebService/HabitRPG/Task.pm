@@ -30,6 +30,7 @@ use constant HRPG_REPEAT_MAP => qw(
         down  => 0,
         value => 0,
         type  => 'habit',
+        tags  => { work_uuid => 1, home_uuid => 0 },
     );
 
     say "Task name: ", $task->text;
@@ -43,7 +44,7 @@ The C<history>, C<completed> and C<repeat> attributes may also
 be provided at build-time, but are optional. No checking is done
 on them (yet).
 
-=for Pod::Coverage BUILD text id up down value type history completed repeat
+=for Pod::Coverage BUILD text id up down value type history completed repeat tags
 
 =cut
 

@@ -22,7 +22,7 @@ my $hrpg = WebService::HabitRPG->new(
 
 my $user = $hrpg->user;
 
-is( $user->{profile}{name}, "Paul Fenwick" );
+is( $user->{profile}{name}, q{Paul '@pjf' Fenwick} );
 is( $user->{tasks}{'c343fb63-f978-4d73-b8d8-7cb48f01e415'}{text},
     "Laptop backup" );
 

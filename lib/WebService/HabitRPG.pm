@@ -85,7 +85,7 @@ pairs. When API support is added for tags, this optional will become obsolete.
 
 I<Use of the tags feature should be considered experimental>.
 
-=for Pod::Coverage BUILD DEMOLISH api_token user_id agent api_base
+=for Pod::Coverage BUILD DEMOLISH api_token user_id agent api_base tags tag_prefix
 
 =cut
 
