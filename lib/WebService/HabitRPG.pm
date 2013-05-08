@@ -9,8 +9,10 @@ use Method::Signatures 20121201;
 use WebService::HabitRPG::Task;
 use JSON::Any;
 use Data::Dumper;
+use Carp qw(croak);
 
 our $DEBUG = $ENV{HRPG_DEBUG} || 0;
+our $TAG_PREFIX_CHARACTER = '^';
 
 # ABSTRACT: Perl interface to the HabitRPG API
 
@@ -26,6 +28,7 @@ our $DEBUG = $ENV{HRPG_DEBUG} || 0;
     my $hrpg = WebService::HabitRPG->new(
         api_token => 'your-token-goes-here',
         user_id   => 'your-user-id-goes-here',
+        tags      => { work => $uuid, home => $uuid2, ... }, # optional
     );
 
     # Get everyting about the user
@@ -65,6 +68,7 @@ HabitRPG API.
     my $hrpg = WebService::HabitRPG->new(
         api_token => 'your-token-goes-here',
         user_id   => 'your-user-id-goes-here',
+        tags      => { work => $work_uuid, home => $home_uuid, ... },
     );
 
 Creates a new C<WebService::HabitRPG> object. The C<api_token> and C<user_id>
@@ -75,6 +79,11 @@ own server).
 
 By default, the official API base of C<https://habitrpg.com/api/v1> is used.
 
+The C<tags> field is optional, but if included should consist of C<tag => uuid>
+pairs. When API support is added for tags, this optional will become obsolete.
+
+I<Use of the tags feature should be considered experimental>.
+
 =for Pod::Coverage BUILD DEMOLISH api_token user_id agent api_base
 
 =cut
@@ -84,6 +93,7 @@ has 'user_id'    => (is => 'ro'); # aka x-api-user
 has 'agent'      => (is => 'rw');
 has 'api_base'   => (is => 'ro', default => sub { 'https://habitrpg.com/api/v1' });
 has '_last_json' => (is => 'rw'); # For debugging
+has 'tags'       => (is => 'rw');
 
 # use constant URL_BASE => 'https://habitrpg.com/api/v1';
 
@@ -321,7 +331,13 @@ is returned. Otherwise, returns a list of tasks which contain
 the search term in their names (the C<text> field returned by the API).
 This list is in the same format as the as the L</tasks> method call.
 
-The search term is treated in a literal, case-insensitive fashion.
+If the term begins with the tag prefix character ('^' by default),
+it is considered to be a tag, and the hashless form is searched for.
+For example, '^work' will result in returning all tasks which match
+the tag 'work'.
+
+If the term does not begin with a hash, then the search term is
+treated in a literal, case-insensitive fashion.
 
 If the optional C<all> parameter is set, then all tasks are
 returned. Otherwise only non-completed tasks are returned.
@@ -349,20 +365,34 @@ tasks.  For example:
 method search_tasks($search_term, :$all = 0) {
     my $tasks = $self->tasks;
     my @matches;
+    my $tag_uuid;
+
+    # Check to see if we're doing a tag search.
+
+    if ($search_term =~ /^\Q$TAG_PREFIX_CHARACTER\E(?<tag>.*)/ms) {
+        if (not $self->tags) { croak "No tags defined on " . ref($self) . " object!"; }
+        $tag_uuid = $self->tags->{ $+{tag} };
+        $tag_uuid or croak "Search for unknown tag: $+{tag}";
+    }
 
     foreach my $task (@$tasks) {
 
         next if $task->type eq 'reward';
         if ($task->completed and not $all) { next; }
 
-        # If our search term exactly matches a task ID, then use
-        # that.
+        # If we're doing a tag search...
+        if ($tag_uuid) {
+            next if not $task->tags;    # Skip tagless tasks
+            push(@matches, $task) if $task->tags->{$tag_uuid};
+        }
 
-        if ($task->id eq $search_term) {
+        # If our search term exactly matches a task ID, then use that.
+        elsif ($task->id eq $search_term) {
             return $task;
         }
 
-        if ($task->text =~ /\Q$search_term\E/i) {
+        # Otherwise, if it contains our search term.
+        elsif ($task->text =~ /\Q$search_term\E/i) {
             push(@matches, $task);
         }
     }

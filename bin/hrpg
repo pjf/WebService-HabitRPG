@@ -29,20 +29,20 @@ eval {
 
 Usage:
 
-    hrpg status                  : Show current HP/XP/GP
-    hrpg tasks                   : Show current tasks
-    hrpg habit|daily|reward|todo : Show tasks of current type
-    hrpg new                     : Create new task 'hrpg new' for help.
-    hrpg [+-][num] task          : Increment/decrement a task or habit
-    hrpg history task            : Show the history of a task
-    hrpg show task               : Show detailed info about a task
-    hrpg clear daily              : Uncheck all daily tasks
+    hrpg status                           : Show current HP/XP/GP
+    hrpg tasks [search]                   : Show current tasks
+    hrpg habit|daily|reward|todo [search] : Show tasks of current type
+    hrpg new                              : Create new task 'hrpg new' for help.
+    hrpg [+-][num] [task]                 : Increment/decrement a task or habit
+    hrpg history [task]                   : Show the history of a task
+    hrpg clear daily                      : Uncheck all daily tasks
 
     Debugging commands:
     
-    hrpg version                 : Show version information
-    hrpg dump                    : Dump entire user info
-    hrpg dump tasks              : Dump task info
+    hrpg version                          : Show version information
+    hrpg show [task]                      : Show detailed info about a task
+    hrpg dump                             : Dump entire user info
+    hrpg dump tasks                       : Dump task info
 
 =head1 SETUP
 
@@ -151,20 +151,20 @@ if (not @ARGV or $ARGV[0] eq 'help') {
     say q{
     Usage:
 
-    hrpg status                   : Show current HP/XP/GP
-    hrpg tasks                    : Show current tasks
-    hrpg habit|daily|reward|todo  : Show tasks of current type
-    hrpg new                      : Create new task 'hrpg new' for help.
-    hrpg [+-][num] task [comment] : Increment/decrement a task or habit
-    hrpg history task             : Show the history of a task
-    hrpg show task                : Show detailed info about a task
-    hrpg clear daily              : Uncheck all daily tasks
+    hrpg status                           : Show current HP/XP/GP
+    hrpg tasks [search]                   : Show current tasks
+    hrpg habit|daily|reward|todo [search] : Show tasks of current type
+    hrpg new                              : Create new task 'hrpg new' for help.
+    hrpg [+-][num] [task]                 : Increment/decrement a task or habit
+    hrpg history [task]                   : Show the history of a task
+    hrpg clear daily                      : Uncheck all daily tasks
 
     Debugging commands:
     
-    hrpg version                  : Show version information
-    hrpg dump                     : Dump entire user info
-    hrpg dump tasks               : Dump task info
+    hrpg version                          : Show version information
+    hrpg show [task]                      : Show detailed info about a task
+    hrpg dump                             : Dump entire user info
+    hrpg dump tasks                       : Dump task info
 
     For more documentation, use `perldoc hrpg`.
     };
@@ -223,6 +223,12 @@ elsif ($ARGV[0] eq "--dev") {
     }
 }
 
+# Add tags if in config file.
+
+if ($config->{tags}) {
+    push @bonus_constructor_args, tags => $config->{tags};
+};
+
 my $hrpg = WebService::HabitRPG->new(
     api_token  => $config->{auth}{api_token},
     user_id    => $config->{auth}{user_id},
@@ -277,7 +283,15 @@ given ($cmd) {
     }
 
     when (/^(?<type>habit|todo|daily|reward)$/) {
-        my $tasks = $hrpg->tasks($+{type});
+        my ($search) = @ARGV;
+        my $tasks;
+
+        if (not $search) {
+            $tasks = $hrpg->tasks($+{type});
+        }
+        else {
+            $tasks = [ $hrpg->search_tasks($search) ];
+        }
 
         foreach my $task (@$tasks) {
             next if $task->type eq 'todo' and $task->completed;
@@ -286,7 +300,16 @@ given ($cmd) {
     }
 
     when ('tasks') {
-        my $tasks = $hrpg->tasks();
+
+        my ($search) = @ARGV;
+        my $tasks;
+
+        if (not $search) {
+            $tasks = $hrpg->tasks();
+        }
+        else {
+            $tasks = [ $hrpg->search_tasks($search) ];
+        }
 
         my $last_type = "";
 

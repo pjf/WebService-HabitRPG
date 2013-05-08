@@ -75,6 +75,7 @@ has 'type'      => ( is => 'ro', required => 1, isa => $Type);
 has 'history'   => ( is => 'ro' );  # TODO: Objectify
 has 'repeat'    => ( is => 'ro' );  # TODO: Objectify
 has 'completed' => ( is => 'ro' );
+has 'tags'      => ( is => 'ro' );  # Hashref to uuid => True pairs.
 has '_raw'      => ( is => 'rw' );
 
 sub BUILD {
