@@ -2,6 +2,10 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * DEBUG:    Settng HRPG_DEBUG=1 in the environment now shows
+                arguments used to construct a task, *before* that
+                task is actually constructed.
+
 0.19      2013-05-08 15:31:02 Australia/Melbourne
 
     * FEATURE:  `hrpg tasks` and `hrpg [daily|todo|habit]` now support

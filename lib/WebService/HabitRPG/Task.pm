@@ -44,7 +44,7 @@ The C<history>, C<completed> and C<repeat> attributes may also
 be provided at build-time, but are optional. No checking is done
 on them (yet).
 
-=for Pod::Coverage BUILD text id up down value type history completed repeat tags
+=for Pod::Coverage BUILDARGS BUILD text id up down value type history completed repeat tags
 
 =cut
 
@@ -79,13 +79,22 @@ has 'completed' => ( is => 'ro' );
 has 'tags'      => ( is => 'ro' );  # Hashref to uuid => True pairs.
 has '_raw'      => ( is => 'rw' );
 
-sub BUILD {
-    my ($self, $args) = @_;
+# Debugging hooks in case things go weird.
+
+around BUILDARGS => sub {
+    my $orig  = shift;
+    my $class = shift;
 
     if ($WebService::HabitRPG::DEBUG) {
         warn "Building task with:\n";
-        warn Dumper($args), "\n";
+        warn Dumper(\@_), "\n";
     }
+
+    return $class->$orig(@_);
+};
+
+sub BUILD {
+    my ($self, $args) = @_;
 
     # Since we're usually being called directly with the results of
     # a JSON parse, we want to record that original structure here.
