@@ -2,6 +2,10 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * FEATURE:  _get_tasks() now sorts by task type (todo/daily/etc).
+                This emulates the behaviour provided by the older
+                HabitRPG server codebase.
+
 0.20      2013-08-14 13:37:36 PST8PDT
 
     * DEBUG:    Settng HRPG_DEBUG=1 in the environment now shows

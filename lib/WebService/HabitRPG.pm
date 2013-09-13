@@ -400,6 +400,7 @@ method search_tasks($search_term, :$all = 0) {
             push(@matches, $task);
         }
     }
+
     return @matches;
 }
 
@@ -418,6 +419,9 @@ method _get_tasks($url) {
             $raw,
         );
     }
+
+    # Sort based on task type. The old API used to do this for us.
+    @tasks = sort { $a->type cmp $b->type } @tasks;
 
     return \@tasks;
 }
