@@ -2,6 +2,9 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * BUGFIX:   _get_tasks() with a single task ID no longer
+                produces a 'Not an ARRAY reference' error.
+
 0.21      2013-09-13 19:47:58 Australia/Melbourne
 
     * FEATURE:  _get_tasks() now sorts by task type (todo/daily/etc).

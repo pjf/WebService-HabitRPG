@@ -409,6 +409,13 @@ method search_tasks($search_term, :$all = 0) {
 method _get_tasks($url) {
     my $results = $self->_get_request($url);
 
+    # If we're fetching a single task, it can come back as
+    # an un-wrapped hash. We re-wrap it here if that's the case.
+
+    if (ref($results) ne 'ARRAY') {
+        $results = [$results];
+    }
+
     my @tasks;
 
     # Somehow we can get back completely undefined results,
