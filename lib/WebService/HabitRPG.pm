@@ -169,7 +169,10 @@ at L</tasks> above.
 =cut
 
 method get_task($task_id) {
-    return $self->_get_tasks("/user/task/$task_id");
+
+    # _get_tasks() always returns an array ref, so we unpack that here.
+
+    return $self->_get_tasks("/user/task/$task_id")->[0];
 }
 
 =method new_task
