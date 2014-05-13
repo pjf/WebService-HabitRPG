@@ -214,7 +214,18 @@ my $config_file = "$ENV{HOME}/.habitrpgrc";
 my $config = Config::Tiny->read( $config_file );
 
 unless ($config->{auth}{api_token}) {
-    die "Cannot find user credentials in $config_file\n";
+    die <<"END_DIE";
+Cannot find user credentials in $config_file
+
+You'll probably find it useful to have a $config_file file that
+looks like the following:
+
+    [auth]
+    user_id   = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    api_token = xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+You can get these values by going to Settings -> API in HabitRPG.
+END_DIE
 }
 
 my @bonus_constructor_args;
