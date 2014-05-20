@@ -8,6 +8,8 @@ Revision history for WebService::HabitRPG
     * BUGFIX:   Fewer experimental warnings about given/when on
                 more recent perls (Courtesy Rob Hoelz in GH #34)
 
+    * TESTS:    Disabled a bit-rotted live test in t/99_online.t
+
 0.21      2013-09-13 19:47:58 Australia/Melbourne
 
     * FEATURE:  _get_tasks() now sorts by task type (todo/daily/etc).
