@@ -42,7 +42,8 @@ my $task_template = {
     'text' => 'Floss Teeth',
     'down' => JSON::Any::false,
     'id' => 'a670fc50-4e04-4b0f-9583-e4ee55fced02',
-    'type' => 'habit'
+    'type' => 'habit',
+    'streak' => 0
 };
 
 # Let's start with an actual task.
@@ -54,6 +55,8 @@ is($task->id, 'a670fc50-4e04-4b0f-9583-e4ee55fced02');
 is($task->type, 'habit');
 is($task->down, 0);
 is($task->up, 1);
+
+is($task->streak, 0);
 
 {
     my $formatted = $task->format_task;
