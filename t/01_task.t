@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More;
 use WebService::HabitRPG::Task;
-use JSON::XS::Boolean;
+use JSON::Any;
 
 my $task_template = {
     'history' => [
@@ -37,10 +37,10 @@ my $task_template = {
                     }
                 ],
     'value' => '0.760752430691001',
-    'up' => bless( do{\(my $o = 1)}, 'JSON::XS::Boolean' ),
+    'up' => JSON::Any::true,
     'notes' => '',
     'text' => 'Floss Teeth',
-    'down' => bless( do{\(my $o = 0)}, 'JSON::XS::Boolean' ),
+    'down' => JSON::Any::false,
     'id' => 'a670fc50-4e04-4b0f-9583-e4ee55fced02',
     'type' => 'habit'
 };
