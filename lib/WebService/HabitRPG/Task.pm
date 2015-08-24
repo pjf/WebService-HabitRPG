@@ -77,6 +77,7 @@ has 'history'   => ( is => 'ro' );  # TODO: Objectify
 has 'repeat'    => ( is => 'ro' );  # TODO: Objectify
 has 'completed' => ( is => 'ro' );
 has 'tags'      => ( is => 'ro' );  # Hashref to uuid => True pairs.
+has 'streak'    => ( is => 'ro' );
 has '_raw'      => ( is => 'rw' );
 
 # Debugging hooks in case things go weird.
