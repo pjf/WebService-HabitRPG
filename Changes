@@ -2,6 +2,13 @@ Revision history for WebService::HabitRPG
 
 {{$NEXT}}
 
+    * BUGFIX: Task::active_today returns true when used on
+              called on a task that repeats over an
+              interval (GH #35).
+
+    * FEATURE: A task's streak is now available via an
+               accessor (GH #36).
+
 0.22      2014-05-20 12:21:42+10:00 Australia/Melbourne
 
     * BUGFIX:   _get_tasks() with a single task ID no longer
