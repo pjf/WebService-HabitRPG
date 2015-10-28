@@ -8,6 +8,8 @@ use Scalar::Util qw(looks_like_number);
 use POSIX qw(strftime);
 use Carp qw(croak);
 use Data::Dumper;
+use DateTime;
+use DateTime::Format::ISO8601;
 
 use constant HRPG_REPEAT_MAP => qw(
     su m t w th f s
@@ -115,14 +117,28 @@ already completed, check C< $task->completed >.
 sub active_today {
     my ($self) = @_;
 
-    # Non-daily tasks are always active
-    
-    if ($self->type ne 'daily') {
-        return 1;
-    }
+    return 1 if $self->type ne 'daily';
 
-    my $today_short = (HRPG_REPEAT_MAP)[ int(strftime "%w", localtime) ];
-    return $self->repeat->{$today_short};
+    my $frequency = $self->_raw->{frequency};
+
+    if ($frequency eq 'weekly') {
+        return unless $self->repeat;
+
+        my $today_short = (HRPG_REPEAT_MAP)[ int(strftime "%w", localtime) ];
+        return $self->repeat->{$today_short};
+    }
+    elsif ($frequency eq 'daily') {
+        my $every_x = $self->_raw->{everyX};
+        return unless $every_x;
+
+        my $start_date       = DateTime::Format::ISO8601->new->parse_datetime($self->_raw->{startDate})->truncate(to => 'day');
+        my $days_since_start = DateTime->today->delta_days($start_date)->in_units('days');
+
+        return $days_since_start % $every_x == 0;
+    }
+    else {
+        return;
+    }
 }
 
 =method format_task()
