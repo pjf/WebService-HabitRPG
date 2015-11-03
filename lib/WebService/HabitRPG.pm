@@ -54,7 +54,8 @@ our $TAG_PREFIX_CHARACTER = '^';
 
 =head1 DESCRIPTION
 
-Interface to API provided by L<HabitRPG|http://habitrpg.com/>.
+Interface to API provided by L<HabitRPG|http://habitrpg.com/>, also
+known as Habitica.
 
 At the time of release, the HabitRPG API is still under construction.
 This module may change as a result.
