@@ -3,7 +3,6 @@ use strict;
 use warnings;
 use Test::More;
 use WebService::HabitRPG::Task;
-use JSON::Any;
 
 my $task_template = {
     'history' => [
@@ -37,10 +36,10 @@ my $task_template = {
                     }
                 ],
     'value' => '0.760752430691001',
-    'up' => JSON::Any::true,
+    'up' => 1,
     'notes' => '',
     'text' => 'Floss Teeth',
-    'down' => JSON::Any::false,
+    'down' => 0,
     'id' => 'a670fc50-4e04-4b0f-9583-e4ee55fced02',
     'type' => 'habit',
     'streak' => 0
