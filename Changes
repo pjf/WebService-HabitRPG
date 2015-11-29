@@ -4,6 +4,10 @@ Revision history for WebService::HabitRPG
 
 0.24      2015-11-29 15:31:54-06:00 America/Chicago
 
+    * TESTS: Make sure tests pass under Cpanel::JSON::XS
+
+    * DOCUMENTATION: Mention Habitica in the main POD
+
 0.23      2015-10-28 07:38:27-05:00 America/Chicago
 
     * BUGFIX: Task::active_today returns true when used on
