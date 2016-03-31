@@ -8,6 +8,7 @@ use DateTime;
 
 sub active_repeat_for_today {
     my $today = DateTime->today;
+    $today->set_time_zone('local');
 
     my $day_of_week = $today->day_of_week;
     $day_of_week = 0 if $day_of_week == 7; # convert Sunday (7) to 0
