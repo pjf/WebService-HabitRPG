@@ -46,7 +46,7 @@ The C<history>, C<completed> and C<repeat> attributes may also
 be provided at build-time, but are optional. No checking is done
 on them (yet).
 
-=for Pod::Coverage BUILDARGS BUILD text id up down value type history completed repeat tags
+=for Pod::Coverage BUILDARGS BUILD text id up down value type history completed repeat tags streak
 
 =cut
 
