@@ -124,7 +124,7 @@ sub active_today {
     if ($frequency eq 'weekly') {
         return unless $self->repeat;
 
-        my $today_short = (HRPG_REPEAT_MAP)[ int(strftime "%w", localtime) ];
+        my $today_short = (HRPG_REPEAT_MAP)[ DateTime->today->set_time_zone('local')->day_of_week ];
         return $self->repeat->{$today_short};
     }
     elsif ($frequency eq 'daily') {
