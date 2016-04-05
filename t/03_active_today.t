@@ -7,17 +7,16 @@ use JSON::Any;
 use DateTime;
 
 sub active_repeat_for_today {
-    my $today = DateTime->today;
+    my $today = DateTime->now;
     $today->set_time_zone('local');
 
     my $day_of_week = $today->day_of_week;
-    $day_of_week = 0 if $day_of_week == 7; # convert Sunday (7) to 0
 
     my @repeat_map = WebService::HabitRPG::Task::HRPG_REPEAT_MAP;
 
     my $repeat = { map { $_ => JSON::Any::false } @repeat_map };
 
-    $repeat->{$repeat_map[$day_of_week]} = JSON::Any::true;
+    $repeat->{$repeat_map[$day_of_week - 1]} = JSON::Any::true;
 
     return $repeat;
 }
