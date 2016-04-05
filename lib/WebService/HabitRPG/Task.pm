@@ -12,7 +12,7 @@ use DateTime;
 use DateTime::Format::ISO8601;
 
 use constant HRPG_REPEAT_MAP => qw(
-    su m t w th f s
+    m t w th f s su
 );
 
 # TODO: croak provides poor error messages in here, possibly due to
@@ -124,7 +124,7 @@ sub active_today {
     if ($frequency eq 'weekly') {
         return unless $self->repeat;
 
-        my $today_short = (HRPG_REPEAT_MAP)[ DateTime->now->set_time_zone('local')->day_of_week ];
+        my $today_short = (HRPG_REPEAT_MAP)[ DateTime->now->set_time_zone('local')->day_of_week - 1 ];
         return $self->repeat->{$today_short};
     }
     elsif ($frequency eq 'daily') {
