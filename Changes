@@ -1,6 +1,8 @@
 Revision history for WebService::HabitRPG
 
 {{$NEXT}}
+
+0.26      2016-04-04 19:39:31-05:00 America/Chicago
     * BUGFIX: Fix off-by-one errors for daily repeats
 
 0.25      2016-03-30 22:48:56-05:00 America/Chicago
