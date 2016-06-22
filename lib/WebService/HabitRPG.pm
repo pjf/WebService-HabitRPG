@@ -79,7 +79,7 @@ compatible user-agent with C<agent>, and should you need it your own HabitRPG
 API base URL with C<api_base> (useful for testing, or if you're running your
 own server).
 
-By default, the official API base of C<https://habitica.com/api/v2> is used.
+By default, the official API base of C<https://habitica.com/api/v3> is used.
 
 The C<tags> field is optional, but if included should consist of C<tag => uuid>
 pairs. When API support is added for tags, this optional will become obsolete.
@@ -93,12 +93,12 @@ I<Use of the tags feature should be considered experimental>.
 has 'api_token'  => (is => 'ro'); # aka x-api-key
 has 'user_id'    => (is => 'ro'); # aka x-api-user
 has 'agent'      => (is => 'rw');
-has 'api_base'   => (is => 'ro', default => sub { 'https://habitica.com/api/v2' });
+has 'api_base'   => (is => 'ro', default => sub { 'https://habitica.com/api/v3' });
 has '_last_json' => (is => 'rw'); # For debugging
 has 'tags'       => (is => 'rw');
 has 'tag_prefix' => (is => 'rw', default => sub { '^' });
 
-# use constant URL_BASE => 'https://habitica.com/api/v2';
+# use constant URL_BASE => 'https://habitica.com/api/v3';
 
 sub BUILD {
     my ($self, $args) = @_;
