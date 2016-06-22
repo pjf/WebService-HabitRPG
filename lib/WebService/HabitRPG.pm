@@ -155,9 +155,9 @@ data structures returned by this method.
 
 method tasks($type where qr{^(?: habit | daily | todo | reward | )$}x = "") {
     if ($type) {
-        return $self->_get_tasks( "/user/tasks?type=$type" ); 
+        return $self->_get_tasks( "/tasks/user?type=$type" );
     }
-    return $self->_get_tasks( "/user/tasks" ); 
+    return $self->_get_tasks( "/tasks/user" );
 }
 
 =method get_task
@@ -173,7 +173,7 @@ method get_task($task_id) {
 
     # _get_tasks() always returns an array ref, so we unpack that here.
 
-    return $self->_get_tasks("/user/task/$task_id")->[0];
+    return $self->_get_tasks("/task/$task_id")->[0];
 }
 
 =method new_task
@@ -273,7 +273,7 @@ method updown(
     $direction! where qr{up|down}
 ) {
 
-    my $req = $self->_build_request('POST', "/user/tasks/$task/$direction");
+    my $req = $self->_build_request('POST', "/tasks/$task/score/$direction");
 
     return $self->_request( $req );
 }
