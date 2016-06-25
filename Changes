@@ -1,6 +1,8 @@
 Revision history for WebService::HabitRPG
 
 {{$NEXT}}
+
+0.27      2016-06-25 09:28:55-05:00 America/Chicago (TRIAL RELEASE)
     * Bumped up to v3 API.  The v3 API should work exactly
       the same as before, except when querying tasks by
       type, a plural form of the type (ie. dailys, not
