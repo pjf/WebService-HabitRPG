@@ -37,8 +37,8 @@ our $TAG_PREFIX_CHARACTER = '^';
     # Get all tasks.
     my $tasks = $hrpg->tasks;
 
-    # Get all tasks of a particular type (eg: 'daily')
-    my $daily = $hrpg->tasks('daily');
+    # Get all tasks of a particular type (eg: 'dailys')
+    my $daily = $hrpg->tasks('dailys');
 
     # Increment/decrement a task
     $hrpg->up($task_id);
@@ -137,12 +137,12 @@ method user()       { return $self->_get_request( '/user'        ); }
 =method tasks
 
     my $tasks  = $hrpg->tasks();            # All tasks
-    my $habits = $hrpg->tasks('habit');     # Only habits
+    my $habits = $hrpg->tasks('habits');    # Only habits
 
 Return a reference to an array of tasks. With no arguments, all
 tasks (habits, dailies, todos and rewards) are returned. With
 an argument, only tasks of the given type are returned. The
-argument must be one of C<habit>, C<daily>, C<todo> or C<reward>.
+argument must be one of C<habits>, C<dailys>, C<todos> or C<rewards>.
 
 See L<WebService::HabitRPG::Task> for a complete description of
 what task objects look like.
@@ -153,7 +153,7 @@ data structures returned by this method.
 
 =cut
 
-method tasks($type where qr{^(?: habit | daily | todo | reward | )$}x = "") {
+method tasks($type where qr{^(?: habits | dailys | todos | rewards | )$}x = "") {
     if ($type) {
         return $self->_get_tasks( "/tasks/user?type=$type" );
     }
