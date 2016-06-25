@@ -446,7 +446,13 @@ method _get_request($url) {
 # the JSON-filled result
 
 method _request($req) {
-    return $self->_decode_json($self->agent->request( $req )->decoded_content);
+    my $result = $self->_decode_json($self->agent->request( $req )->decoded_content);
+
+    if ($result->{'error'}) {
+        die $result->{'error'}{'message'};
+    }
+
+    return $result->{'data'};
 }
 
 method _build_request($type, $url) {
