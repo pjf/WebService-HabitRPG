@@ -3,6 +3,7 @@ use v5.010;
 use strict;
 use warnings;
 use autodie;
+use Carp qw(carp);
 use Moo;
 use WWW::Mechanize;
 use Method::Signatures 20121201;
@@ -153,8 +154,12 @@ data structures returned by this method.
 
 =cut
 
-method tasks($type where qr{^(?: habits | dailys | todos | rewards | )$}x = "") {
+method tasks($type where qr{^(?: habits | habit | dailys | daily | todos | todo | rewards | reward | )$}x = "") {
     if ($type) {
+        if ($type !~ /s$/) {
+            carp "Deprecated type '$type' used in tasks(); please use '${type}s' instead";
+            $type .= 's';
+        }
         return $self->_get_tasks( "/tasks/user?type=$type" );
     }
     return $self->_get_tasks( "/tasks/user" );
