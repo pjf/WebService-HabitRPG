@@ -145,6 +145,11 @@ tasks (habits, dailies, todos and rewards) are returned. With
 an argument, only tasks of the given type are returned. The
 argument must be one of C<habits>, C<dailys>, C<todos> or C<rewards>.
 
+B<NOTE>: The singular forms C<habit>, C<daily>, C<todo>, and C<reward>
+are also accepted, but deprecated; they will be forbidden in a future
+release.  Please take the time to update your code!  A warning will
+be emitted if a "legacy" type is seen.
+
 See L<WebService::HabitRPG::Task> for a complete description of
 what task objects look like.
 
