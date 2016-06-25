@@ -242,7 +242,7 @@ method new_task(
         %$extend,
     });
 
-    my $req = $self->_build_request('POST', '/user/task');
+    my $req = $self->_build_request('POST', '/tasks/user');
 
     $req->content( $payload );
 
