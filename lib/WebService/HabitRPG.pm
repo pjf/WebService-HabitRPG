@@ -8,7 +8,7 @@ use Moo;
 use WWW::Mechanize;
 use Method::Signatures 20121201;
 use WebService::HabitRPG::Task;
-use JSON::Any;
+use JSON::MaybeXS;
 use Data::Dumper;
 use Carp qw(croak);
 
@@ -477,7 +477,7 @@ method _build_request($type, $url) {
     return $req;
 }
 
-my $json = JSON::Any->new;
+my $json = JSON->new;
 
 method _decode_json($string) {
 
