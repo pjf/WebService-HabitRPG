@@ -3,6 +3,7 @@ use v5.010;
 use strict;
 use warnings;
 use autodie;
+use JSON::MaybeXS qw(is_bool);
 use Moo;
 use Scalar::Util qw(looks_like_number);
 use POSIX qw(strftime);
@@ -53,7 +54,9 @@ on them (yet).
 # Validation functions
 
 my $Bool = sub {
-    croak "$_[0] must be 0|1" unless $_[0] =~ /^[01]$/;
+    my ( $value ) = @_;
+    $value = 0 + $value if is_bool($value);
+    croak "$value must be 0|1" unless $value =~ /^[01]$/;
 };
 
 my $Num = sub {
