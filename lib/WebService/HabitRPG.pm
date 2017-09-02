@@ -284,6 +284,8 @@ method updown(
 ) {
 
     my $req = $self->_build_request('POST', "/tasks/$task/score/$direction");
+    $req->header('Content-Length' => 0);
+    $req->content('');
 
     return $self->_request( $req );
 }
