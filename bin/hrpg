@@ -15,7 +15,7 @@ use utf8::all;
 my $IDT_VERSION = 0;
 
 eval {
-    require WebService::Idonethis; 
+    require WebService::Idonethis;
     $IDT_VERSION = WebService::Idonethis->VERSION;
 };
 
@@ -38,7 +38,7 @@ Usage:
     hrpg clear daily                      : Uncheck all daily tasks
 
     Debugging commands:
-    
+
     hrpg version                          : Show version information
     hrpg show [task]                      : Show detailed info about a task
     hrpg dump                             : Dump entire user info
@@ -117,7 +117,7 @@ To find out the uuid of a tag, use `hrpg show` on a task having
 that tag, and examine the resulting data structure. Once the upstream
 tag API is finished, this process will be obsolete.
 
-Tags can be used in any search by prefixing them with the 
+Tags can be used in any search by prefixing them with the
 I<tag prefix character>, which defaults to caret (^).  For
 example:
 
@@ -191,7 +191,7 @@ if (not @ARGV or $ARGV[0] eq 'help') {
     hrpg clear daily                      : Uncheck all daily tasks
 
     Debugging commands:
-    
+
     hrpg version                          : Show version information
     hrpg show [task]                      : Show detailed info about a task
     hrpg dump                             : Dump entire user info
@@ -238,7 +238,7 @@ if ($ENV{HRPG_API_BASE}) {
 # We could use Getopt::Long, but it gets confused by + and -
 # being commands.
 
-if ($ARGV[0] eq "--beta") { 
+if ($ARGV[0] eq "--beta") {
     shift @ARGV;
     @bonus_constructor_args = ( api_base => 'https://beta.habitrpg.com/api/v1' );
 
@@ -297,7 +297,7 @@ elsif ($cmd eq 'dump') {
     my ($option) = @ARGV;
 
     if (not $option) {
-        say Dumper $hrpg->user; 
+        say Dumper $hrpg->user;
     }
     elsif ($option eq 'tasks') {
         say Dumper $hrpg->tasks;
@@ -431,7 +431,7 @@ elsif ($cmd =~ /^(?<dir>[+-])(?<qty>\d*)$/) {
         # this, so we're not digging out hash keys.
 
         my $stats = $hrpg->user->{stats};
-        
+
         my $result;
 
         foreach (1..$qty) {
@@ -445,7 +445,7 @@ elsif ($cmd =~ /^(?<dir>[+-])(?<qty>\d*)$/) {
         # Display stats delta.
         # TODO: Detect level ups and handle appropriately.
 
-        printf "HP: %d/%d (%+.2f)\n", $result->{hp}, $stats->{maxHealth},  $result->{hp}  - $stats->{hp}; 
+        printf "HP: %d/%d (%+.2f)\n", $result->{hp}, $stats->{maxHealth},  $result->{hp}  - $stats->{hp};
         printf "XP: %d/%d (%+.2f)\n", $result->{exp},$stats->{toNextLevel},$result->{exp} - $stats->{exp};
         printf "GP: %.2f (%+.2f)\n",  $result->{gp} ,                      $result->{gp}  - $stats->{gp};
 
