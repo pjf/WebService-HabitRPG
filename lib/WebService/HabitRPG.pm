@@ -103,7 +103,7 @@ has 'tag_prefix' => (is => 'rw', default => sub { '^' });
 
 sub BUILD {
     my ($self, $args) = @_;
-    
+
     my $keep_alive = $args->{keep_alive} // 1;
 
     # Set a default agent if we don't already have one.
@@ -365,7 +365,7 @@ tasks.  For example:
 
     # Search for a user-provided term
     my @tasks = $hrpg->search_tasks($term);
-    
+
     # Increment task if found
     if (@tasks == 1) {
         $hrpg->up($tasks[0]->id);
